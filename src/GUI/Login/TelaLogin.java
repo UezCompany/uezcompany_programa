@@ -48,6 +48,7 @@ public class TelaLogin extends javax.swing.JFrame {
         selectCargo = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
         jMenu3.setText("File");
@@ -108,6 +109,10 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel4.setText("Id:");
         getContentPane().add(jLabel4);
         jLabel4.setBounds(90, 110, 15, 20);
+
+        jLabel6.setText("jLabel6");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(380, 190, 37, 16);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma3.png"))); // NOI18N
         getContentPane().add(jLabel5);
@@ -185,6 +190,7 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;

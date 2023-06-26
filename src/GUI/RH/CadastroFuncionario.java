@@ -118,7 +118,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton3);
-        jButton3.setBounds(740, 450, 72, 23);
+        jButton3.setBounds(700, 410, 72, 23);
 
         jButton1.setText("Limpar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {

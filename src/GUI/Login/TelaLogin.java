@@ -47,7 +47,6 @@ public class TelaLogin extends javax.swing.JFrame {
         txtSenha = new javax.swing.JTextField();
         selectCargo = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
@@ -104,10 +103,6 @@ public class TelaLogin extends javax.swing.JFrame {
         });
         getContentPane().add(jButton1);
         jButton1.setBounds(290, 280, 72, 23);
-
-        jLabel6.setText("jLabel6");
-        getContentPane().add(jLabel6);
-        jLabel6.setBounds(500, 250, 37, 16);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Id:");
@@ -190,7 +185,6 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;

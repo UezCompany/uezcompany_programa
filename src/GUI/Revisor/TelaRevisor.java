@@ -30,9 +30,7 @@ public class TelaRevisor extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
@@ -47,22 +45,12 @@ public class TelaRevisor extends javax.swing.JFrame {
         jButton7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton7.setText("Pedidos de entrada Uezer");
         getContentPane().add(jButton7);
-        jButton7.setBounds(130, 280, 260, 60);
-
-        jButton10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton10.setText("Desbanir Uzer");
-        getContentPane().add(jButton10);
-        jButton10.setBounds(590, 150, 230, 60);
+        jButton7.setBounds(530, 160, 260, 60);
 
         jButton9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton9.setText("Pedidos de entrada Uzer");
         getContentPane().add(jButton9);
         jButton9.setBounds(130, 160, 260, 60);
-
-        jButton12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton12.setText("Desbanir Uezer");
-        getContentPane().add(jButton12);
-        jButton12.setBounds(590, 280, 230, 60);
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton1.setText("Sair");
@@ -123,8 +111,6 @@ public class TelaRevisor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;

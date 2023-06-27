@@ -41,9 +41,12 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
-        txtTelefone = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtSenha = new javax.swing.JTextField();
+        txtTelefone = new javax.swing.JFormattedTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela de cadastro de funcionários");
@@ -59,27 +62,27 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Nome completo:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(150, 330, 120, 20);
+        jLabel2.setBounds(150, 130, 120, 20);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("RG:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(150, 240, 80, 20);
+        jLabel3.setBounds(150, 300, 80, 20);
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setText("Cargo:");
         getContentPane().add(jLabel8);
-        jLabel8.setBounds(550, 170, 80, 20);
+        jLabel8.setBounds(680, 230, 80, 20);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel9.setText("Email:");
         getContentPane().add(jLabel9);
-        jLabel9.setBounds(370, 170, 80, 20);
+        jLabel9.setBounds(400, 230, 80, 20);
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("CPF");
         getContentPane().add(jLabel10);
-        jLabel10.setBounds(150, 170, 80, 20);
+        jLabel10.setBounds(150, 230, 80, 20);
 
         try {
             txtRG.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##.###.###-#")));
@@ -87,7 +90,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         getContentPane().add(txtRG);
-        txtRG.setBounds(150, 260, 90, 22);
+        txtRG.setBounds(150, 320, 90, 22);
 
         try {
             txtCPF.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###.###.###-##")));
@@ -95,7 +98,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         getContentPane().add(txtCPF);
-        txtCPF.setBounds(150, 190, 80, 22);
+        txtCPF.setBounds(150, 250, 100, 22);
 
         txtNome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -103,13 +106,13 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtNome);
-        txtNome.setBounds(150, 350, 64, 22);
+        txtNome.setBounds(150, 150, 700, 22);
         getContentPane().add(txtEmail);
-        txtEmail.setBounds(370, 190, 64, 22);
+        txtEmail.setBounds(400, 250, 190, 22);
 
-        selectCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Revisor", "Moderador", "RH", "SAC" }));
+        selectCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Revisor", "Moderador", "RH", "SAC", "Dev Web", "Dev Desktop", "Suporte TI", "Designer", "Marketing digital", "Experiência do usuário" }));
         getContentPane().add(selectCargo);
-        selectCargo.setBounds(550, 190, 100, 22);
+        selectCargo.setBounds(680, 250, 140, 22);
 
         jButton3.setText("Voltar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +121,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton3);
-        jButton3.setBounds(700, 410, 72, 23);
+        jButton3.setBounds(190, 410, 72, 23);
 
         jButton1.setText("Limpar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -127,8 +130,9 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-        jButton1.setBounds(440, 460, 90, 23);
+        jButton1.setBounds(670, 410, 90, 23);
 
+        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton2.setText("Cadastrar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,21 +140,44 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2);
-        jButton2.setBounds(270, 450, 90, 23);
+        jButton2.setBounds(390, 460, 160, 32);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setText("Telefone:");
         getContentPane().add(jLabel11);
-        jLabel11.setBounds(360, 240, 80, 20);
-        getContentPane().add(txtTelefone);
-        txtTelefone.setBounds(360, 260, 64, 22);
+        jLabel11.setBounds(400, 300, 80, 20);
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel12.setText("Senha:");
         getContentPane().add(jLabel12);
-        jLabel12.setBounds(560, 240, 80, 20);
+        jLabel12.setBounds(680, 310, 80, 20);
         getContentPane().add(txtSenha);
-        txtSenha.setBounds(560, 260, 64, 22);
+        txtSenha.setBounds(680, 330, 140, 22);
+
+        try {
+            txtTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("+##(##)#####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtTelefone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTelefoneActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtTelefone);
+        txtTelefone.setBounds(400, 320, 126, 22);
+
+        jLabel4.setText("Informações de empresariais");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(680, 200, 170, 16);
+
+        jLabel5.setText("Informações pessoais");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(150, 200, 120, 16);
+
+        jLabel6.setText("Informações de contato");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(400, 200, 140, 16);
 
         pack();
         setLocationRelativeTo(null);
@@ -187,6 +214,10 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         telaRH.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void txtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelefoneActionPerformed
 
     /**
      * @param args the command line arguments
@@ -234,6 +265,9 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JComboBox<String> selectCargo;
@@ -242,6 +276,6 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     private javax.swing.JTextField txtNome;
     private javax.swing.JFormattedTextField txtRG;
     private javax.swing.JTextField txtSenha;
-    private javax.swing.JTextField txtTelefone;
+    private javax.swing.JFormattedTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
 }

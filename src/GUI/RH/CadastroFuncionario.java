@@ -60,7 +60,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
         getContentPane().add(jLabel1);
         jLabel1.setBounds(210, 120, 550, 50);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Nome completo:");
         getContentPane().add(jLabel2);
         jLabel2.setBounds(150, 170, 120, 20);
@@ -141,7 +141,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2);
-        jButton2.setBounds(390, 480, 160, 32);
+        jButton2.setBounds(390, 430, 160, 32);
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel11.setText("Telefone:");
@@ -174,7 +174,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
 
         jLabel5.setText("Informações pessoais");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(150, 240, 120, 16);
+        jLabel5.setBounds(150, 240, 140, 16);
 
         jLabel6.setText("Informações de contato");
         getContentPane().add(jLabel6);
@@ -235,7 +235,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windowns Classic".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

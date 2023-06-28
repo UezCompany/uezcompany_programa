@@ -70,5 +70,14 @@ public class Funcionario {
     String telefone;
     String cargo;
     String senha;
+    String situacao;
+
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
     
 }

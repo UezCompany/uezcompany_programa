@@ -4,6 +4,14 @@
  */
 package GUI.RH;
 
+import DAO.FuncionarioDAO;
+import GUI.Moderador.TelaModerador;
+import GUI.Revisor.TelaRevisor;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -35,7 +43,7 @@ public class DemicaoFuncionario extends javax.swing.JFrame {
         txtId = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtMotivo = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -88,10 +96,10 @@ public class DemicaoFuncionario extends javax.swing.JFrame {
         getContentPane().add(jLabel3);
         jLabel3.setBounds(90, 120, 50, 16);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtMotivo.setColumns(20);
+        txtMotivo.setLineWrap(true);
+        txtMotivo.setRows(5);
+        jScrollPane1.setViewportView(txtMotivo);
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(90, 140, 234, 86);
@@ -106,16 +114,20 @@ public class DemicaoFuncionario extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String id = txtId.getText();
+        String motivo = txtMotivo.getText();
         int resposta = JOptionPane.showConfirmDialog(null, "Deseja mesmo demitir o funcionário com o id  " + id + "?", "Confirmação", JOptionPane.OK_CANCEL_OPTION);
         
         if (resposta == JOptionPane.OK_OPTION) {
-            // O usuário clicou em "OK"
+            FuncionarioDAO dao = new FuncionarioDAO();
+            dao.demitir(id, motivo);
             System.out.println("Funcionário demitido!");
             JOptionPane.showMessageDialog(null, "Funcionário demitido!");
         } else if (resposta == JOptionPane.CANCEL_OPTION) {
             // O usuário clicou em "Cancelar" ou fechou a janela do diálogo
             System.out.println("Ação cancelada.");
         } 
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -171,7 +183,7 @@ public class DemicaoFuncionario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JFormattedTextField txtId;
+    private javax.swing.JTextArea txtMotivo;
     // End of variables declaration//GEN-END:variables
 }

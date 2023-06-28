@@ -47,24 +47,40 @@ public class FuncionarioDAO {
         }
     }
     
-    public void demitir(Funcionario funcionario) {
-        /*
-        String sql = "INSERT INTO funcionario(nome, cpf, email, telefone, senha) VALUES(?, ?, ?, ?, ?)";
-        try {
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setString(1, funcionario.getNome());
-                stmt.setString(2, funcionario.getCpf());
-                stmt.setString(2, funcionario.getRg());
-                stmt.setString(3, funcionario.getEmail());
-                stmt.setString(4, funcionario.getTelefone());
-                stmt.setString(4, funcionario.getCargo());
-                stmt.setString(5, funcionario.getSenha());
-                stmt.execute();
-            }
-        } catch (SQLException u) {
-            throw new RuntimeException(u);
+    public void demitir(String id, String motivo) {
+         String sql1 = "UPDATE funcionario SET situacaoFuncionario = 'demitido' WHERE idFuncionario = ?";
+    String sql2 = "UPDATE funcionario SET motivodemicaoFuncionario = ? WHERE idFuncionario = ?";
+    
+    try {
+        connection.setAutoCommit(false); // Desabilita o commit automático
+        
+        try (PreparedStatement stmt1 = connection.prepareStatement(sql1);
+             PreparedStatement stmt2 = connection.prepareStatement(sql2)) {
+            
+            stmt1.setString(1, id);
+            stmt1.executeUpdate();
+            
+            stmt2.setString(1, motivo);
+            stmt2.setString(2, id);
+            stmt2.executeUpdate();
+            
+            connection.commit(); // Efetua o commit das alterações
+            System.out.println("Operações executadas com sucesso!");
         }
-        */
+    } catch (SQLException u) {
+        try {
+            connection.rollback(); // Desfaz as alterações em caso de erro
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException(u);
+    } finally {
+        try {
+            connection.setAutoCommit(true); // Habilita o commit automático novamente
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     }
 }
 

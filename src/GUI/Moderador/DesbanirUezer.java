@@ -8,12 +8,12 @@ package GUI.Moderador;
  *
  * @author renat
  */
-public class DesbanirUzer extends javax.swing.JFrame {
+public class DesbanirUezer extends javax.swing.JFrame {
 
     /**
      * Creates new form DesbanirUzer
      */
-    public DesbanirUzer() {
+    public DesbanirUezer() {
         initComponents();
     }
 
@@ -38,7 +38,7 @@ public class DesbanirUzer extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Uzers banidos");
+        jLabel1.setText("Uezers banidos");
         getContentPane().add(jLabel1);
         jLabel1.setBounds(420, 50, 120, 25);
 
@@ -1005,20 +1005,21 @@ public class DesbanirUzer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DesbanirUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DesbanirUezer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DesbanirUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DesbanirUezer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DesbanirUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DesbanirUezer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DesbanirUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DesbanirUezer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new DesbanirUzer().setVisible(true);
+                new DesbanirUezer().setVisible(true);
             }
         });
     }

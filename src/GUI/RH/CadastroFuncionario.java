@@ -4,6 +4,10 @@
  */
 package GUI.RH;
 
+import DAO.FuncionarioDAO;
+import Models.Funcionario;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author renat
@@ -193,15 +197,36 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String nome = txtNome.getText();
-        String cpf = txtCPF.getText();
-        String rg = txtRG.getText();
-        String email = txtEmail.getText();
-        String telefone = txtTelefone.getText();
-        String cargo = selectCargo.getSelectedItem().toString();
-        String senha = txtSenha.getText();
+        Funcionario funcionario = new Funcionario();
+        funcionario.setNome(txtNome.getText());
+        funcionario.setCpf(txtCPF.getText());
+        funcionario.setRg(txtRG.getText());
+        funcionario.setEmail(txtEmail.getText());
+        funcionario.setTelefone(txtTelefone.getText());
+        funcionario.setCargo(selectCargo.getSelectedItem().toString());
+        funcionario.setSenha(txtSenha.getText());
         
-        
+        // fazendo a validação dos dados
+        if ((txtNome.getText().isEmpty()) || txtSenha.getText().isEmpty() ||(txtCPF.getText().isEmpty()) || (txtEmail.getText().isEmpty()) || (txtTelefone.getText().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Os campos não podem retornar vazios");
+        }
+        else {
+
+            // instanciando a classe UzerDAO do pacote dao e criando seu objeto dao
+            FuncionarioDAO dao = new FuncionarioDAO();
+            dao.adiciona(funcionario);
+            JOptionPane.showMessageDialog(null, "Usuário "+txtNome.getText()+" inserido com sucesso! ");
+        }
+
+        // apaga os dados preenchidos nos campos de texto
+        txtNome.setText("");
+        txtCPF.setText("");
+        txtRG.setText("");
+        txtEmail.setText("");
+        txtTelefone.setText("");
+        selectCargo.setSelectedIndex(0);
+        txtSenha.setText("");
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

@@ -40,6 +40,8 @@ public class BanirUezer extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Tela Banir Uezer");
+        setMinimumSize(new java.awt.Dimension(640, 360));
         getContentPane().setLayout(null);
 
         jLabel3.setText("Motivo");
@@ -104,6 +106,7 @@ public class BanirUezer extends javax.swing.JFrame {
         jLabel4.setBounds(0, 0, 640, 360);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextArea1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextArea1MouseClicked
@@ -129,8 +132,8 @@ public class BanirUezer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        TelaRH telaRH = new TelaRH();
-        telaRH.setVisible(true);
+        TelaModerador telaMod = new TelaModerador();
+        telaMod.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 

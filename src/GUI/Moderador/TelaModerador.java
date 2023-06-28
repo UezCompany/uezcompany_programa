@@ -49,6 +49,11 @@ public class TelaModerador extends javax.swing.JFrame {
 
         jButton7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton7.setText("Banir Uzer");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton7);
         jButton7.setBounds(140, 150, 230, 60);
 
@@ -64,16 +69,31 @@ public class TelaModerador extends javax.swing.JFrame {
 
         jButton9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton9.setText("Banir Uezer");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton9);
         jButton9.setBounds(140, 280, 230, 60);
 
         jButton10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton10.setText("Desbanir Uzer");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton10);
         jButton10.setBounds(590, 150, 230, 60);
 
         jButton12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton12.setText("Desbanir Uezer");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton12);
         jButton12.setBounds(590, 280, 230, 60);
 
@@ -90,6 +110,30 @@ public class TelaModerador extends javax.swing.JFrame {
         t.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        BanirUzer telabanuzer = new BanirUzer();
+        telabanuzer.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        BanirUezer telabanuezer = new BanirUezer();
+        telabanuezer.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        DesbanirUzer teladesbanuzer = new DesbanirUzer();
+        teladesbanuzer.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        DesbanirUezer teladesbanuezer = new DesbanirUezer();
+        teladesbanuezer.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton12ActionPerformed
 
     /**
      * @param args the command line arguments

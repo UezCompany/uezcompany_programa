@@ -43,11 +43,11 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtId = new javax.swing.JTextField();
-        txtSenha = new javax.swing.JTextField();
         selectCargo = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        txtId = new javax.swing.JFormattedTextField();
+        txtSenha = new javax.swing.JPasswordField();
         jLabel5 = new javax.swing.JLabel();
 
         jMenu3.setText("File");
@@ -71,30 +71,23 @@ public class TelaLogin extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Login");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(290, 30, 64, 32);
+        jLabel1.setBounds(280, 30, 64, 32);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Cargo:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(410, 110, 50, 20);
+        jLabel3.setBounds(420, 90, 50, 20);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Senha:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(90, 180, 40, 20);
-
-        txtId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtId);
-        txtId.setBounds(90, 130, 195, 26);
-
-        txtSenha.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        getContentPane().add(txtSenha);
-        txtSenha.setBounds(90, 200, 195, 26);
+        jLabel2.setBounds(90, 160, 40, 20);
 
         selectCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Moderador", "Revisor", "RH" }));
         getContentPane().add(selectCargo);
-        selectCargo.setBounds(410, 130, 93, 22);
+        selectCargo.setBounds(420, 110, 93, 22);
 
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("Entrar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,12 +95,28 @@ public class TelaLogin extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-        jButton1.setBounds(290, 280, 72, 23);
+        jButton1.setBounds(280, 290, 72, 23);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Id:");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(90, 110, 15, 20);
+        jLabel4.setBounds(90, 90, 15, 20);
+
+        try {
+            txtId.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("######")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        getContentPane().add(txtId);
+        txtId.setBounds(90, 110, 64, 22);
+
+        txtSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSenhaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtSenha);
+        txtSenha.setBounds(90, 180, 130, 22);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma3.png"))); // NOI18N
         getContentPane().add(jLabel5);
@@ -144,6 +153,10 @@ public class TelaLogin extends javax.swing.JFrame {
                 throw new AssertionError();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenhaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -192,7 +205,7 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
     private javax.swing.JComboBox<String> selectCargo;
-    private javax.swing.JTextField txtId;
-    private javax.swing.JTextField txtSenha;
+    private javax.swing.JFormattedTextField txtId;
+    private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 }

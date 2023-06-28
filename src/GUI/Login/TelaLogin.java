@@ -7,6 +7,8 @@ package GUI.Login;
 import GUI.Moderador.TelaModerador;
 import GUI.RH.TelaRH;
 import GUI.Revisor.TelaRevisor;
+import java.sql.*;
+import java.sql.DriverManager;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -127,31 +129,57 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //String id = txtId.getText();
-        //String senha = txtSenha.getText();
-        //String cargo = selectCargo.getSelectedItem().toString();
-        switch (selectCargo.getSelectedIndex()) {
-            case 0:
-                JOptionPane.showMessageDialog(null, "Selecione um cargo.");
-                break;
-            case 1:
-                TelaModerador telaMod = new TelaModerador();
-                telaMod.setVisible(true);
-                this.dispose();
-                break;
-            case 2:
-                TelaRevisor telaRev = new TelaRevisor();
-                telaRev.setVisible(true);
-                this.dispose();
-                break;
-            case 3:
-                TelaRH telaRH = new TelaRH();
-                telaRH.setVisible(true);
-                this.dispose();
-                break;
-            default:
-                throw new AssertionError();
+        String id = txtId.getText();
+        String senha = txtSenha.getText();
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            try (Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/uezdb", "root", "");
+                Statement stmt = (Statement) conn.createStatement()) {
+
+                String query = "SELECT * FROM funcionario WHERE idFuncionario = '"+id+"' AND senhaFuncionario = '"+senha+"'";
+
+                try (ResultSet rs = stmt.executeQuery(query)) {
+                    if (rs.next()) {
+                        String idFuncionario = rs.getString("idFuncionario");
+                        String nomeFuncionario = rs.getString("nomeFuncionario");
+                        String senhaFuncionario = rs.getString("senhaFuncionario");
+                        if (id.equals(idFuncionario) && senha.equals(senhaFuncionario)) {
+                            JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeFuncionario + "!");
+                            switch (selectCargo.getSelectedIndex()) {
+                                case 0:
+                                    JOptionPane.showMessageDialog(null, "Selecione um cargo.");
+                                    break;
+                                case 1:
+                                    TelaModerador telaMod = new TelaModerador();
+                                    telaMod.setVisible(true);
+                                    this.dispose();
+                                    break;
+                                case 2:
+                                    TelaRevisor telaRev = new TelaRevisor();
+                                    telaRev.setVisible(true);
+                                    this.dispose();
+                                    break;
+                                case 3:
+                                    TelaRH telaRH = new TelaRH();
+                                    telaRH.setVisible(true);
+                                    this.dispose();
+                                    break;
+                                default:
+                                    throw new AssertionError();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
+                    }
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            System.out.println("Erro");
         }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed

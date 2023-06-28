@@ -32,6 +32,7 @@ public class TelaRH extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -58,14 +59,14 @@ public class TelaRH extends javax.swing.JFrame {
         jButton1.setBounds(380, 360, 200, 40);
 
         jButton7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton7.setText("Cadastrar funcionário");
+        jButton7.setText("Funcionários");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
         getContentPane().add(jButton7);
-        jButton7.setBounds(180, 180, 230, 60);
+        jButton7.setBounds(370, 270, 230, 60);
 
         jButton8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton8.setText("Demitir funcionário");
@@ -76,6 +77,16 @@ public class TelaRH extends javax.swing.JFrame {
         });
         getContentPane().add(jButton8);
         jButton8.setBounds(540, 180, 230, 60);
+
+        jButton9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton9.setText("Cadastrar funcionário");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton9);
+        jButton9.setBounds(180, 180, 230, 60);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma3medio.png"))); // NOI18N
         getContentPane().add(jLabel3);
@@ -98,10 +109,14 @@ public class TelaRH extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        CadastroFuncionario t = new CadastroFuncionario();
+        InfoFuncionarios t = new InfoFuncionarios();
         t.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -143,6 +158,7 @@ public class TelaRH extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables

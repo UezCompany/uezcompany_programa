@@ -6,30 +6,25 @@ import java.sql.*;
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FuncionarioDAO {
-    private Connection connection;
-    Long id;
-    String nome;
-    String cpf;
-    String rg;
-    String email;
-    String telefone;
-    String cargo;
-    String senha;
 
-    public FuncionarioDAO(){
-       this.connection = new ConnectionFactory().getConnection();
+    private Connection connection;
+
+    public FuncionarioDAO() {
+        this.connection = new ConnectionFactory().getConnection();
     }
 
-    public void adiciona(Funcionario funcionario){
+    public void adiciona(Funcionario funcionario) {
 
-         LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
         String horario = now.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         String data = now.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         System.out.println("Horário: " + horario + " " + data);
-        
-        String sql = "INSERT INTO `funcionario`(`nomeFuncionario`, `emailFuncionario`, `senhaFuncionario`, `telefoneFuncionario`, `cpfFuncionario`, `rgFuncionario`, `cargoFuncionario`, `datacadFuncionario`) VALUES (?,?,?,?,?,?,?,?)";
+
+        String sql = "INSERT INTO funcionario (nomeFuncionario, emailFuncionario, senhaFuncionario, telefoneFuncionario, cpfFuncionario, rgFuncionario, cargoFuncionario, datacadFuncionario) VALUES (?,?,?,?,?,?,?,?)";
         try {
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setString(1, funcionario.getNome());
@@ -46,41 +41,37 @@ public class FuncionarioDAO {
             throw new RuntimeException(u);
         }
     }
-    
-    public void demitir(String id, String motivo) {
-         String sql1 = "UPDATE funcionario SET situacaoFuncionario = 'demitido' WHERE idFuncionario = ?";
-    String sql2 = "UPDATE funcionario SET motivodemicaoFuncionario = ? WHERE idFuncionario = ?";
-    
-    try {
-        connection.setAutoCommit(false); // Desabilita o commit automático
-        
-        try (PreparedStatement stmt1 = connection.prepareStatement(sql1);
-             PreparedStatement stmt2 = connection.prepareStatement(sql2)) {
-            
-            stmt1.setString(1, id);
-            stmt1.executeUpdate();
-            
-            stmt2.setString(1, motivo);
-            stmt2.setString(2, id);
-            stmt2.executeUpdate();
-            
-            connection.commit(); // Efetua o commit das alterações
-            System.out.println("Operações executadas com sucesso!");
-        }
-    } catch (SQLException u) {
-        try {
-            connection.rollback(); // Desfaz as alterações em caso de erro
+
+    public List<Funcionario> buscarTodos() {
+        List<Funcionario> funcionarios = new ArrayList<>();
+
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement("SELECT * FROM funcionario");
+             ResultSet resultSet = stmt.executeQuery()) {
+
+            while (resultSet.next()) {
+                // Recuperar os dados do funcionário do ResultSet
+                int id = resultSet.getInt("id");
+                String nome = resultSet.getString("nomeFuncionario");
+                String email = resultSet.getString("emailFuncionario");
+                String senha = resultSet.getString("senhaFuncionario");
+                String telefone = resultSet.getString("telefoneFuncionario");
+                String cpf = resultSet.getString("cpfFuncionario");
+                String rg = resultSet.getString("rgFuncionario");
+                String cargo = resultSet.getString("cargoFuncionario");
+                String dataCadastro = resultSet.getString("datacadFuncionario");
+
+                // Criar um objeto Funcionario e adicionar à lista
+                Funcionario funcionario = new Funcionario(id, nome, email, senha, telefone, cpf, rg, cargo, dataCadastro);
+                funcionarios.add(funcionario);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            // Tratar exceção adequadamente
         }
-        throw new RuntimeException(u);
-    } finally {
-        try {
-            connection.setAutoCommit(true); // Habilita o commit automático novamente
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+        return funcionarios;
     }
-    }
+
 }
 

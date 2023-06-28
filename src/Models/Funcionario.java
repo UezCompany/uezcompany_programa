@@ -2,6 +2,9 @@ package Models;
 
 public class Funcionario {
 
+    public Funcionario(int id1, String nome1, String email1, String senha1, String telefone1, String cpf1, String rg1, String cargo1, String dataCadastro) {
+    }
+
     public Long getId() {
         return id;
     }

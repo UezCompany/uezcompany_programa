@@ -5,7 +5,14 @@
 package GUI.RH;
 
 import DAO.FuncionarioDAO;
+import GUI.Moderador.TelaModerador;
+import GUI.Revisor.TelaRevisor;
 import Models.Funcionario;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -197,7 +204,7 @@ public class CadastroFuncionario extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Funcionario funcionario = new Funcionario();
+        Funcionario funcionario = new Funcionario(id, nome, email, senha, telefone, cpf, rg, cargo, dataCadastro);
         funcionario.setNome(txtNome.getText());
         funcionario.setCpf(txtCPF.getText());
         funcionario.setRg(txtRG.getText());
@@ -211,11 +218,29 @@ public class CadastroFuncionario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Os campos não podem retornar vazios");
         }
         else {
-
             // instanciando a classe UzerDAO do pacote dao e criando seu objeto dao
             FuncionarioDAO dao = new FuncionarioDAO();
             dao.adiciona(funcionario);
-            JOptionPane.showMessageDialog(null, "Usuário "+txtNome.getText()+" inserido com sucesso! ");
+            try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            try (Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/uezdb", "root", "");
+                Statement stmt = (Statement) conn.createStatement()) {
+
+                String query = "SELECT * FROM funcionario WHERE nomeFuncionario = '"+txtNome.getText()+"' AND senhaFuncionario = '"+txtSenha.getText()+"'";
+
+                try (ResultSet rs = stmt.executeQuery(query)) {
+                    if (rs.next()) {
+                        String idFuncionario = rs.getString("idFuncionario");
+                        JOptionPane.showMessageDialog(null, "Usuário "+txtNome.getText()+" inserido com sucesso! O seu id é " + idFuncionario);
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Não cadastrou");
+                    }
+                }
+            }
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            System.out.println("Erro");
+        }
         }
 
         // apaga os dados preenchidos nos campos de texto

@@ -5,6 +5,7 @@
 package GUI;
 
 import GUI.Login.TelaLogin;
+import GUI.Moderador.GestaoUzer;
 import GUI.Revisor.AceitarUezer;
 import GUI.Revisor.AceitarUzer;
 import java.awt.Graphics;
@@ -85,6 +86,11 @@ public class Homepage extends javax.swing.JFrame {
             jMenu2.add(jMenuItem1);
 
             jMenuItem2.setText("Gestão de Uzer's");
+            jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jMenuItem2ActionPerformed(evt);
+                }
+            });
             jMenu2.add(jMenuItem2);
 
             jMenuBar1.add(jMenu2);
@@ -141,6 +147,11 @@ public class Homepage extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        GestaoUzer t = new GestaoUzer();
+        t.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments

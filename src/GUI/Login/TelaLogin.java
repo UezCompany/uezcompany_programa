@@ -4,15 +4,16 @@
  */
 package GUI.Login;
 
-import GUI.Moderador.TelaModerador;
-import GUI.RH.TelaRH;
-import GUI.Revisor.TelaRevisor;
+import Factory.ConnectionFactory;
+import GUI.Homepage;
 import java.sql.*;
 import java.sql.DriverManager;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -24,6 +25,12 @@ public class TelaLogin extends javax.swing.JFrame {
      * Creates new form TelaLogin
      */
     public TelaLogin() {
+        try {
+            // Define o look and feel Nimbus
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         initComponents();
     }
 
@@ -36,58 +43,31 @@ public class TelaLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar2 = new javax.swing.JMenuBar();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenuBar3 = new javax.swing.JMenuBar();
-        jMenu5 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        selectCargo = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         txtId = new javax.swing.JFormattedTextField();
+        jButton1 = new javax.swing.JButton();
         txtSenha = new javax.swing.JPasswordField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
-        jMenu3.setText("File");
-        jMenuBar2.add(jMenu3);
-
-        jMenu4.setText("Edit");
-        jMenuBar2.add(jMenu4);
-
-        jMenu5.setText("File");
-        jMenuBar3.add(jMenu5);
-
-        jMenu6.setText("Edit");
-        jMenuBar3.add(jMenu6);
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela de Login");
-        setMinimumSize(new java.awt.Dimension(640, 360));
         setResizable(false);
-        getContentPane().setLayout(null);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Login");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(280, 30, 64, 32);
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Cargo:");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(420, 90, 50, 20);
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Senha:");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(90, 160, 40, 20);
-
-        selectCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Moderador", "Revisor", "RH" }));
-        getContentPane().add(selectCargo);
-        selectCargo.setBounds(420, 110, 93, 22);
+        try {
+            txtId.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("######")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdActionPerformed(evt);
+            }
+        });
+        getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 150, 180, -1));
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("Entrar");
@@ -96,33 +76,35 @@ public class TelaLogin extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(280, 290, 72, 23);
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Id:");
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(90, 90, 15, 20);
-
-        try {
-            txtId.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("######")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        getContentPane().add(txtId);
-        txtId.setBounds(90, 110, 64, 22);
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, -1, 23));
 
         txtSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSenhaActionPerformed(evt);
             }
         });
-        getContentPane().add(txtSenha);
-        txtSenha.setBounds(90, 180, 130, 22);
+        getContentPane().add(txtSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 180, -1));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma3.png"))); // NOI18N
-        getContentPane().add(jLabel5);
-        jLabel5.setBounds(0, 0, 640, 360);
+        jLabel4.setFont(new java.awt.Font("Montserrat ExtraBold", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Senha:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 190, 70, 20));
+
+        jLabel3.setFont(new java.awt.Font("Montserrat ExtraBold", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("ID:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 30, 20));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/logintela.png"))); // NOI18N
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, -1));
+
+        jLabel1.setFont(new java.awt.Font("Montserrat Thin", 3, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("jLabel1");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, -1, -1));
+
+        jLabel2.setText("jLabel2");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, -1, -1));
 
         pack();
         setLocationRelativeTo(null);
@@ -130,61 +112,41 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String id = txtId.getText();
-        String senha = txtSenha.getText();
+        String senha = new String(txtSenha.getPassword());
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            try (Connection conn = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/uezdb", "root", "");
-                Statement stmt = (Statement) conn.createStatement()) {
+        try ( Connection conn = ConnectionFactory.getConnection();  Statement stmt = conn.createStatement()) {
 
-                String query = "SELECT * FROM funcionario WHERE idFuncionario = '"+id+"' AND senhaFuncionario = '"+senha+"'";
+            String query = "SELECT * FROM funcionario WHERE idFuncionario = '" + id + "' AND senhaFuncionario = '" + senha + "'";
 
-                try (ResultSet rs = stmt.executeQuery(query)) {
-                    if (rs.next()) {
-                        String idFuncionario = rs.getString("idFuncionario");
-                        String nomeFuncionario = rs.getString("nomeFuncionario");
-                        String senhaFuncionario = rs.getString("senhaFuncionario");
-                        if (id.equals(idFuncionario) && senha.equals(senhaFuncionario)) {
-                            JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeFuncionario + "!");
-                            switch (selectCargo.getSelectedIndex()) {
-                                case 0:
-                                    JOptionPane.showMessageDialog(null, "Selecione um cargo.");
-                                    break;
-                                case 1:
-                                    TelaModerador telaMod = new TelaModerador();
-                                    telaMod.setVisible(true);
-                                    this.dispose();
-                                    break;
-                                case 2:
-                                    TelaRevisor telaRev = new TelaRevisor();
-                                    telaRev.setVisible(true);
-                                    this.dispose();
-                                    break;
-                                case 3:
-                                    TelaRH telaRH = new TelaRH();
-                                    telaRH.setVisible(true);
-                                    this.dispose();
-                                    break;
-                                default:
-                                    throw new AssertionError();
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
-                        }
+            try ( ResultSet rs = stmt.executeQuery(query)) {
+                if (rs.next()) {
+                    String idFuncionario = rs.getString("idFuncionario");
+                    String nomeFuncionario = rs.getString("nomeFuncionario");
+                    String senhaFuncionario = rs.getString("senhaFuncionario");
+                    if (id.equals(idFuncionario) && senha.equals(senhaFuncionario)) {
+                        JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeFuncionario + "!");
+                        Homepage t = new Homepage();
+                        t.setVisible(true);
+                        this.dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
                 }
             }
-        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            System.out.println("Erro");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSenhaActionPerformed
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,13 +188,6 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuBar jMenuBar3;
-    private javax.swing.JComboBox<String> selectCargo;
     private javax.swing.JFormattedTextField txtId;
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables

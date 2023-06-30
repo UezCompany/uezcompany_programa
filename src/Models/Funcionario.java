@@ -2,11 +2,12 @@ package Models;
 
 public class Funcionario {
 
-    public Funcionario(int id1, String nome1, String email1, String senha1, String telefone1, String cpf1, String rg1, String cargo1, String dataCadastro) {
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -49,14 +50,6 @@ public class Funcionario {
         this.telefone = telefone;
     }
 
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-    
     public String getCargo() {
         return cargo;
     }
@@ -64,7 +57,24 @@ public class Funcionario {
     public void setCargo(String cargo) {
         this.cargo = cargo;
     }
-    
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
+
+
     Long id;
     String nome;
     String cpf;
@@ -75,12 +85,4 @@ public class Funcionario {
     String senha;
     String situacao;
 
-    public String getSituacao() {
-        return situacao;
-    }
-
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
-    }
-    
 }

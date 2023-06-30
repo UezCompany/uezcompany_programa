@@ -4,8 +4,9 @@
  */
 package GUI.Moderador;
 
-import GUI.RH.TelaRH;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -17,6 +18,12 @@ public class BanirUezer extends javax.swing.JFrame {
      * Creates new form BanirUezer
      */
     public BanirUezer() {
+        try {
+            // Define o look and feel Nimbus
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         initComponents();
     }
 
@@ -31,7 +38,7 @@ public class BanirUezer extends javax.swing.JFrame {
 
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtMotivo = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         txtId = new javax.swing.JFormattedTextField();
         jButton1 = new javax.swing.JButton();
@@ -42,28 +49,33 @@ public class BanirUezer extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela Banir Uezer");
         setMinimumSize(new java.awt.Dimension(640, 360));
-        getContentPane().setLayout(null);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setText("Motivo");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(80, 120, 50, 16);
+        jLabel3.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Motivo:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 140, 50, -1));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(0, 0));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(240, 90));
+
+        txtMotivo.setColumns(20);
+        txtMotivo.setLineWrap(true);
+        txtMotivo.setRows(4);
+        txtMotivo.setMinimumSize(new java.awt.Dimension(0, 0));
+        txtMotivo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTextArea1MouseClicked(evt);
+                txtMotivoMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTextArea1);
+        jScrollPane1.setViewportView(txtMotivo);
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(80, 140, 234, 86);
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, -1, -1));
 
+        jLabel1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("ID:");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(400, 120, 219, 16);
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, 100, -1));
 
         try {
             txtId.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("######")));
@@ -75,8 +87,7 @@ public class BanirUezer extends javax.swing.JFrame {
                 txtIdActionPerformed(evt);
             }
         });
-        getContentPane().add(txtId);
-        txtId.setBounds(400, 140, 86, 22);
+        getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 100, -1));
 
         jButton1.setText("Banir");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -84,8 +95,7 @@ public class BanirUezer extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(160, 290, 90, 23);
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 90, -1));
 
         jButton2.setText("Voltar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -93,25 +103,23 @@ public class BanirUezer extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2);
-        jButton2.setBounds(350, 290, 72, 23);
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 290, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Preencha os campos para banir um Uezer!");
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(190, 80, 260, 44);
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 330, 44));
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma4pequeno.png"))); // NOI18N
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(0, 0, 640, 360);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma1.png"))); // NOI18N
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextArea1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextArea1MouseClicked
+    private void txtMotivoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtMotivoMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextArea1MouseClicked
+    }//GEN-LAST:event_txtMotivoMouseClicked
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
@@ -132,9 +140,7 @@ public class BanirUezer extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        TelaModerador telaMod = new TelaModerador();
-        telaMod.setVisible(true);
-        this.dispose();
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -180,7 +186,7 @@ public class BanirUezer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JFormattedTextField txtId;
+    private javax.swing.JTextArea txtMotivo;
     // End of variables declaration//GEN-END:variables
 }

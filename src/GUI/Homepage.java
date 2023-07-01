@@ -5,6 +5,7 @@
 package GUI;
 
 import GUI.Login.TelaLogin;
+import GUI.Moderador.GestaoCliente;
 import GUI.Moderador.GestaoUzer;
 import GUI.Revisor.AceitarUezer;
 import GUI.Revisor.AceitarUzer;
@@ -45,10 +46,8 @@ public class Homepage extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
@@ -75,17 +74,9 @@ public class Homepage extends javax.swing.JFrame {
 
             jMenuBar1.setBorder(null);
 
-            jMenu2.setText("Uzer's");
+            jMenu2.setText("Clientes");
 
-            jMenuItem1.setText("Aprovar Uzer");
-            jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jMenuItem1ActionPerformed(evt);
-                }
-            });
-            jMenu2.add(jMenuItem1);
-
-            jMenuItem2.setText("Gestão de Uzer's");
+            jMenuItem2.setText("Gestão de Clientes");
             jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jMenuItem2ActionPerformed(evt);
@@ -95,12 +86,9 @@ public class Homepage extends javax.swing.JFrame {
 
             jMenuBar1.add(jMenu2);
 
-            jMenu3.setText("Uezer's");
+            jMenu3.setText("Uzer's");
 
-            jMenuItem3.setText("Aprovar Uezer");
-            jMenu3.add(jMenuItem3);
-
-            jMenuItem4.setText("Gestão dos Uezer's");
+            jMenuItem4.setText("Gestão dos Uzer's");
             jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jMenuItem4ActionPerformed(evt);
@@ -140,16 +128,14 @@ public class Homepage extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jMenu4MouseClicked
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
+        GestaoUzer t = new GestaoUzer();
+        t.setVisible(true);
+        
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        GestaoUzer t = new GestaoUzer();
+        GestaoCliente t = new GestaoCliente();
         t.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -194,9 +180,7 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     // End of variables declaration//GEN-END:variables
 }

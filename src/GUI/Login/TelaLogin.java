@@ -62,6 +62,7 @@ public class TelaLogin extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        txtId.setToolTipText("");
         txtId.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

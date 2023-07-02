@@ -5,11 +5,18 @@
 package GUI.Moderador;
 
 import Factory.ConnectionFactory;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -23,8 +30,30 @@ public class GestaoCliente extends javax.swing.JFrame {
     private Connection connection;
 
     /**
-     * Creates new form GestaoUzer
+     * Creates new form GestaoCliente
      */
+    public class ImagePanel extends JPanel {
+
+        private Image image;
+
+        public ImagePanel(String imagePath) {
+            try {
+                image = ImageIO.read(getClass().getResource(imagePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            int panelWidth = getWidth();
+            int panelHeight = getHeight();
+            Image resizedImage = image.getScaledInstance(panelWidth, panelHeight, Image.SCALE_SMOOTH);
+            g.drawImage(resizedImage, 0, 0, null);
+        }
+    }
+
     public GestaoCliente() {
         try {
             // Define o look and feel Nimbus
@@ -33,15 +62,24 @@ public class GestaoCliente extends javax.swing.JFrame {
             e.printStackTrace();
         }
         connection = ConnectionFactory.getConnection();
+        String imagePath = "../Imagem/fundoprograma2.png";
+        URL imageURL = getClass().getResource(imagePath);
+        if (imageURL == null) {
+            System.out.println("Arquivo de imagem não encontrado: " + imagePath);
+        } else {
+            ImageIcon icon = new ImageIcon(imageURL);
+            Image image = icon.getImage();
+        }
+
         initComponents();
-        atualizarListagemUzers();
+        atualizarListagemClientes();
 
     }
 
-    private void atualizarListagemUzers() {
+    private void atualizarListagemClientes() {
         try {
             // Consultar dados do banco de dados
-            String sql = "SELECT * FROM uzer";
+            String sql = "SELECT * FROM cliente";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -83,7 +121,6 @@ public class GestaoCliente extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         btnBanirDesbanir = new javax.swing.JButton();
         btnAtualizarlistagem1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela de gestão de clientes");
@@ -151,10 +188,6 @@ public class GestaoCliente extends javax.swing.JFrame {
         getContentPane().add(btnAtualizarlistagem1);
         btnAtualizarlistagem1.setBounds(790, 170, 130, 23);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma2.png"))); // NOI18N
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(0, 0, 1340, 720);
-
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -173,7 +206,7 @@ public class GestaoCliente extends javax.swing.JFrame {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
 
             // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE uzer SET aprovacaoUzer = ? WHERE idUzer = ?";
+            String sql = "UPDATE cliente SET aprovacaoUzer = ? WHERE idUzer = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setBoolean(1, !aprovacao);
             statement.setString(2, idCliente);
@@ -194,7 +227,7 @@ public class GestaoCliente extends javax.swing.JFrame {
     private void btnBanirDesbanirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanirDesbanirActionPerformed
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Nenhum usuário selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Nenhum Cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -202,39 +235,40 @@ public class GestaoCliente extends javax.swing.JFrame {
 
         // Atualiza o estado do usuário selecionado
         if (situacao.equals("Ativo")) {
-            updateSituacaoUsuario(selectedRow, "Banido");
-            JOptionPane.showMessageDialog(null, "O Uzer foi Banido da plataforma.");
+            String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do usuário selecionado
+            BanirCliente banirClienteFrame = new BanirCliente(idCliente); // Cria a tela BanirUzer com o ID como parâmetro
+            banirClienteFrame.setVisible(true); // Exibe a tela BanirUzer
         } else if (situacao.equals("Banido")) {
             updateSituacaoUsuario(selectedRow, "Ativo");
-            JOptionPane.showMessageDialog(null, "O Uzer foi Ativado na plataforma.");
+            JOptionPane.showMessageDialog(null, "O Cliente foi Ativado na plataforma.");
         }
     }
 
     private void updateSituacaoUsuario(int rowIndex, String novaSituacao) {
-        String idUzer = jTable1.getValueAt(rowIndex, 0).toString(); // Obtém o id do usuário selecionado
+        String idUezer = jTable1.getValueAt(rowIndex, 0).toString(); // Obtém o id do usuário selecionado
 
         try {
             // Atualiza o estado do usuário no banco de dados
-            String sql = "UPDATE uzer SET situacaoUzer = ? WHERE idUzer = ?";
+            String sql = "UPDATE cliente SET situacaoUzer = ? WHERE idUzer = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, novaSituacao);
-            statement.setString(2, idUzer);
+            statement.setString(2, idUezer);
             int rowsUpdated = statement.executeUpdate();
 
             if (rowsUpdated > 0) {
                 // Atualiza a tabela com a nova situação do usuário
                 jTable1.setValueAt(novaSituacao, rowIndex, 2);
             } else {
-                JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBanirDesbanirActionPerformed
 
     private void btnAtualizarlistagem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarlistagem1ActionPerformed
-        atualizarListagemUzers();
+        atualizarListagemClientes();
     }//GEN-LAST:event_btnAtualizarlistagem1ActionPerformed
 
     /**
@@ -288,7 +322,6 @@ public class GestaoCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnAtualizarlistagem1;
     private javax.swing.JButton btnBanirDesbanir;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

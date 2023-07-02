@@ -21,6 +21,12 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class TelaLogin extends javax.swing.JFrame {
 
+    private String idFuncionario;
+
+    public void setIdFuncionario(String idFuncionario) {
+        this.idFuncionario = idFuncionario;
+    }
+
     /**
      * Creates new form TelaLogin
      */
@@ -32,6 +38,7 @@ public class TelaLogin extends javax.swing.JFrame {
             e.printStackTrace();
         }
         initComponents();
+
     }
 
     /**
@@ -124,6 +131,7 @@ public class TelaLogin extends javax.swing.JFrame {
             try ( ResultSet rs = stmt.executeQuery(query)) {
                 if (rs.next()) {
                     String idFuncionario = rs.getString("idFuncionario");
+
                     String nomeFuncionario = rs.getString("nomeFuncionario");
                     String senhaFuncionario = rs.getString("senhaFuncionario");
                     if (id.equals(idFuncionario) && senha.equals(senhaFuncionario)) {

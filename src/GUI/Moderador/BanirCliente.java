@@ -22,14 +22,14 @@ import javax.swing.UnsupportedLookAndFeelException;
  *
  * @author renat
  */
-public class BanirUzer extends javax.swing.JFrame {
+public class BanirCliente extends javax.swing.JFrame {
 
     private String idSelecionado;
 
     /**
      * Creates new form BanirUezer
      */
-    public BanirUzer() {
+    public BanirCliente() {
 
         try {
             // Define o look and feel Nimbus
@@ -40,7 +40,7 @@ public class BanirUzer extends javax.swing.JFrame {
         initComponents();
     }
 
-    public BanirUzer(String id) {
+    public BanirCliente(String id) {
         this();
         idSelecionado = id;
     }
@@ -131,8 +131,8 @@ public class BanirUzer extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Digite o motivo do banimento do Uzer!");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 300, 44));
+        jLabel2.setText("Digite o motivo do banimento do Cliente!");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 310, 44));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma1.png"))); // NOI18N
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -153,7 +153,7 @@ public class BanirUzer extends javax.swing.JFrame {
 
         // Atualizar a situação do usuário
         updateSituacaoUsuario(connection, Motivo, "Banido");
-        JOptionPane.showMessageDialog(null, "O Uzer foi Banido da plataforma.");
+        JOptionPane.showMessageDialog(null, "O Cliente foi Banido da plataforma.");
 
         // Fechar a conexão com o banco de dados
         ConnectionFactory.closeConnection(connection);
@@ -163,7 +163,7 @@ public class BanirUzer extends javax.swing.JFrame {
         String idUezer = idSelecionado;
 
         try {
-            String sql = "UPDATE Uzer SET situacaoUezer = ?, motivobanUzer = ? WHERE idUezer = ? ";
+            String sql = "UPDATE cliente SET situacaoUzer = ?, motivobanCliente = ? WHERE idUzer = ? ";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, novaSituacao);
             statement.setString(2, Motivo);
@@ -206,21 +206,23 @@ public class BanirUzer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BanirUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BanirCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BanirUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BanirCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BanirUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BanirCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BanirUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BanirCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BanirUzer().setVisible(true);
+                new BanirCliente().setVisible(true);
             }
         });
     }

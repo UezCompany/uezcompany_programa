@@ -23,7 +23,7 @@ public class GestaoUzer extends javax.swing.JFrame {
     private Connection connection;
 
     /**
-     * Creates new form GestaoUezer
+     * Creates new form GestaoUzer
      */
     public GestaoUzer() {
         try {
@@ -34,14 +34,14 @@ public class GestaoUzer extends javax.swing.JFrame {
         }
         connection = ConnectionFactory.getConnection();
         initComponents();
-        atualizarListagemUezers();
+        atualizarListagemUzers();
 
     }
 
-    private void atualizarListagemUezers() {
+    private void atualizarListagemUzers() {
         try {
             // Consultar dados do banco de dados
-            String sql = "SELECT * FROM uezer";
+            String sql = "SELECT * FROM uzer";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -180,7 +180,7 @@ public class GestaoUzer extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtualizarlistagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarlistagemActionPerformed
-        atualizarListagemUezers();
+        atualizarListagemUzers();
     }//GEN-LAST:event_btnAtualizarlistagemActionPerformed
 
     private void btnBanirDesbanirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanirDesbanirActionPerformed
@@ -194,11 +194,12 @@ public class GestaoUzer extends javax.swing.JFrame {
 
         // Atualiza o estado do usuário selecionado
         if (situacao.equals("Ativo")) {
-            updateSituacaoUsuario(selectedRow, "Banido");
-            JOptionPane.showMessageDialog(null, "O Uezer foi Banido da plataforma.");
+            String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do usuário selecionado
+            BanirUzer banirUzerFrame = new BanirUzer(idUzer); // Cria a tela BanirUzer com o ID como parâmetro
+            banirUzerFrame.setVisible(true); // Exibe a tela BanirUzer
         } else if (situacao.equals("Banido")) {
             updateSituacaoUsuario(selectedRow, "Ativo");
-            JOptionPane.showMessageDialog(null, "O Uezer foi Ativado na plataforma.");
+            JOptionPane.showMessageDialog(null, "O Uzer foi Ativado na plataforma.");
         }
     }
 
@@ -207,7 +208,7 @@ public class GestaoUzer extends javax.swing.JFrame {
 
         try {
             // Atualiza o estado do usuário no banco de dados
-            String sql = "UPDATE uezer SET situacaoUezer = ? WHERE idUezer = ?";
+            String sql = "UPDATE Uzer SET situacaoUezer = ? WHERE idUezer = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, novaSituacao);
             statement.setString(2, idUezer);
@@ -239,7 +240,7 @@ public class GestaoUzer extends javax.swing.JFrame {
             String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do Uzer selecionado
 
             // Atualiza a aprovação do Uzer no banco de dados
-            String sql = "UPDATE uzer SET aprovacaoUzer = ? WHERE idUzer = ?";
+            String sql = "UPDATE uzer SET aprovacaoUezer = ? WHERE idUezer = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setBoolean(1, !aprovacao);
             statement.setString(2, idUzer);

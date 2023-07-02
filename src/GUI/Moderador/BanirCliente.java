@@ -65,7 +65,7 @@ public class BanirCliente extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Tela de banimento de Uzer");
+        setTitle("Tela de banimento de Cliente");
         setMinimumSize(new java.awt.Dimension(640, 360));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -78,6 +78,7 @@ public class BanirCliente extends javax.swing.JFrame {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(240, 90));
 
         txtMotivo.setColumns(20);
+        txtMotivo.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         txtMotivo.setLineWrap(true);
         txtMotivo.setRows(4);
         txtMotivo.setMinimumSize(new java.awt.Dimension(0, 0));
@@ -101,6 +102,7 @@ public class BanirCliente extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         txtId.setToolTipText("Confirme seu id");
+        txtId.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         txtId.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtIdFocusGained(evt);
@@ -113,6 +115,7 @@ public class BanirCliente extends javax.swing.JFrame {
         });
         getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 110, -1));
 
+        jButton1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         jButton1.setText("Banir");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,6 +124,7 @@ public class BanirCliente extends javax.swing.JFrame {
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 90, -1));
 
+        jButton2.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         jButton2.setText("Voltar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,6 +158,7 @@ public class BanirCliente extends javax.swing.JFrame {
         // Atualizar a situação do usuário
         updateSituacaoUsuario(connection, Motivo, "Banido");
         JOptionPane.showMessageDialog(null, "O Cliente foi Banido da plataforma.");
+        this.dispose();
 
         // Fechar a conexão com o banco de dados
         ConnectionFactory.closeConnection(connection);
@@ -163,7 +168,7 @@ public class BanirCliente extends javax.swing.JFrame {
         String idUezer = idSelecionado;
 
         try {
-            String sql = "UPDATE cliente SET situacaoUzer = ?, motivobanCliente = ? WHERE idUzer = ? ";
+            String sql = "UPDATE cliente SET situacaoCliente = ?, motivobanCliente = ? WHERE idCliente = ? ";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, novaSituacao);
             statement.setString(2, Motivo);
@@ -178,7 +183,7 @@ public class BanirCliente extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed

@@ -7,8 +7,8 @@ package GUI;
 import GUI.Login.TelaLogin;
 import GUI.Moderador.GestaoCliente;
 import GUI.Moderador.GestaoUzer;
-import GUI.Revisor.AceitarUezer;
-import GUI.Revisor.AceitarUzer;
+import GUI.Revisor.AprovarCliente;
+import GUI.Revisor.AprovarUzer;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -49,10 +49,11 @@ public class Homepage extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,6 +90,16 @@ public class Homepage extends javax.swing.JFrame {
             });
             jMenu2.add(jMenuItem2);
 
+            jMenuItem5.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
+            jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/Icons/icons8-usuário-30.png"))); // NOI18N
+            jMenuItem5.setText("Aprovação de Clientes");
+            jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jMenuItem5ActionPerformed(evt);
+                }
+            });
+            jMenu2.add(jMenuItem5);
+
             jMenuBar1.add(jMenu2);
 
             jMenu3.setText("Uzer's");
@@ -104,26 +115,25 @@ public class Homepage extends javax.swing.JFrame {
             });
             jMenu3.add(jMenuItem4);
 
+            jMenuItem6.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
+            jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/Icons/icons8-trabalhador-30.png"))); // NOI18N
+            jMenuItem6.setText("Aprovação de Uzers");
+            jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jMenuItem6ActionPerformed(evt);
+                }
+            });
+            jMenu3.add(jMenuItem6);
+
             jMenuBar1.add(jMenu3);
 
-            jMenu4.setText("Sair");
+            jMenu4.setText("Logout");
             jMenu4.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
             jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     jMenu4MouseClicked(evt);
                 }
             });
-
-            jMenuItem6.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
-            jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/Icons/icons8-sair-30.png"))); // NOI18N
-            jMenuItem6.setText("Log out");
-            jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    jMenuItem6ActionPerformed(evt);
-                }
-            });
-            jMenu4.add(jMenuItem6);
-
             jMenuBar1.add(jMenu4);
 
             setJMenuBar(jMenuBar1);
@@ -144,13 +154,14 @@ public class Homepage extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
     private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
-
+        TelaLogin t = new TelaLogin();
+        t.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jMenu4MouseClicked
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         GestaoUzer t = new GestaoUzer();
         t.setVisible(true);
-
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -158,10 +169,14 @@ public class Homepage extends javax.swing.JFrame {
         t.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        TelaLogin t = new TelaLogin();
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        AprovarCliente t = new AprovarCliente();
         t.setVisible(true);
-        this.dispose();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        AprovarUzer t = new AprovarUzer();
+        t.setVisible(true);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
@@ -207,6 +222,7 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     // End of variables declaration//GEN-END:variables
 }

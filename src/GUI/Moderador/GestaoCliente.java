@@ -5,6 +5,7 @@
 package GUI.Moderador;
 
 import Factory.ConnectionFactory;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
@@ -32,27 +33,6 @@ public class GestaoCliente extends javax.swing.JFrame {
     /**
      * Creates new form GestaoCliente
      */
-    public class ImagePanel extends JPanel {
-
-        private Image image;
-
-        public ImagePanel(String imagePath) {
-            try {
-                image = ImageIO.read(getClass().getResource(imagePath));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            int panelWidth = getWidth();
-            int panelHeight = getHeight();
-            Image resizedImage = image.getScaledInstance(panelWidth, panelHeight, Image.SCALE_SMOOTH);
-            g.drawImage(resizedImage, 0, 0, null);
-        }
-    }
 
     public GestaoCliente() {
         try {
@@ -92,11 +72,12 @@ public class GestaoCliente extends javax.swing.JFrame {
             // Adicionar as linhas à tabela
             while (resultSet.next()) {
                 Object[] rowData = {
-                    resultSet.getString("idUzer"),
-                    resultSet.getString("nomeUzer"),
-                    resultSet.getString("situacaoUzer"),
-                    resultSet.getBoolean("aprovacaoUzer"),
-                    resultSet.getString("datacadUzer")
+                    resultSet.getString("idCliente"),
+                    resultSet.getString("nomeCliente"),
+                    resultSet.getString("situacaoCliente"),
+                    resultSet.getBoolean("aprovacaoCliente"),
+                    resultSet.getString("datacadCliente"),
+                    resultSet.getDouble("avaliacaoCliente")
                 };
                 model.addRow(rowData);
             }
@@ -117,44 +98,63 @@ public class GestaoCliente extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         btnAprovarCliente = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         btnBanirDesbanir = new javax.swing.JButton();
         btnAtualizarlistagem1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela de gestão de clientes");
         setMinimumSize(new java.awt.Dimension(960, 540));
-        getContentPane().setLayout(null);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Listagem de Clientes");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(255, 29, 180, 25);
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 29, 200, -1));
 
+        btnAprovarCliente.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         btnAprovarCliente.setText("Aprovar");
         btnAprovarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAprovarClienteActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAprovarCliente);
-        btnAprovarCliente.setBounds(790, 130, 130, 23);
+        getContentPane().add(btnAprovarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 130, 150, -1));
 
+        btnBanirDesbanir.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+        btnBanirDesbanir.setText("Banir/Desbanir");
+        btnBanirDesbanir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBanirDesbanirActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBanirDesbanir, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 90, 150, -1));
+
+        btnAtualizarlistagem1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+        btnAtualizarlistagem1.setText("Atualizar listagem");
+        btnAtualizarlistagem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarlistagem1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAtualizarlistagem1, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 170, 150, -1));
+
+        jTable1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null}
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Id Cliente", "Nome Cliente", "Situação", "Aprovação", "Data de Cadastro"
+                "Id Cliente", "Nome Cliente", "Situação", "Aprovação", "Data de Cadastro", "Avaliação"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -167,30 +167,20 @@ public class GestaoCliente extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(30, 70, 700, 410);
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 700, 410));
 
-        btnBanirDesbanir.setText("Banir/Desbanir");
-        btnBanirDesbanir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBanirDesbanirActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnBanirDesbanir);
-        btnBanirDesbanir.setBounds(790, 90, 130, 23);
+        ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/fundoprograma2.png"));
+        Image image = icon.getImage();
+        jPanel1 = new javax.swing.JPanel(){
+            public void paintComponent(Graphics g){
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }};
 
-        btnAtualizarlistagem1.setText("Atualizar listagem");
-        btnAtualizarlistagem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAtualizarlistagem1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnAtualizarlistagem1);
-        btnAtualizarlistagem1.setBounds(790, 170, 130, 23);
+            getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 540));
 
-        pack();
-        setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+            pack();
+            setLocationRelativeTo(null);
+        }// </editor-fold>//GEN-END:initComponents
 
     private void btnAprovarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAprovarClienteActionPerformed
         int selectedRow = jTable1.getSelectedRow();
@@ -206,7 +196,7 @@ public class GestaoCliente extends javax.swing.JFrame {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
 
             // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE cliente SET aprovacaoUzer = ? WHERE idUzer = ?";
+            String sql = "UPDATE cliente SET aprovacaoCliente = ? WHERE idCliente = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setBoolean(1, !aprovacao);
             statement.setString(2, idCliente);
@@ -236,8 +226,8 @@ public class GestaoCliente extends javax.swing.JFrame {
         // Atualiza o estado do usuário selecionado
         if (situacao.equals("Ativo")) {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do usuário selecionado
-            BanirCliente banirClienteFrame = new BanirCliente(idCliente); // Cria a tela BanirUzer com o ID como parâmetro
-            banirClienteFrame.setVisible(true); // Exibe a tela BanirUzer
+            BanirCliente banirClienteFrame = new BanirCliente(idCliente); // Cria a tela BanirCliente com o ID como parâmetro
+            banirClienteFrame.setVisible(true); // Exibe a tela BanirCliente
         } else if (situacao.equals("Banido")) {
             updateSituacaoUsuario(selectedRow, "Ativo");
             JOptionPane.showMessageDialog(null, "O Cliente foi Ativado na plataforma.");
@@ -249,7 +239,7 @@ public class GestaoCliente extends javax.swing.JFrame {
 
         try {
             // Atualiza o estado do usuário no banco de dados
-            String sql = "UPDATE cliente SET situacaoUzer = ? WHERE idUzer = ?";
+            String sql = "UPDATE cliente SET situacaoCliente = ? WHERE idCliente = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, novaSituacao);
             statement.setString(2, idUezer);
@@ -322,6 +312,7 @@ public class GestaoCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnAtualizarlistagem1;
     private javax.swing.JButton btnBanirDesbanir;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

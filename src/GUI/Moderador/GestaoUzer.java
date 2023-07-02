@@ -5,10 +5,13 @@
 package GUI.Moderador;
 
 import Factory.ConnectionFactory;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -54,11 +57,12 @@ public class GestaoUzer extends javax.swing.JFrame {
             // Adicionar as linhas à tabela
             while (resultSet.next()) {
                 Object[] rowData = {
-                    resultSet.getString("idUezer"),
-                    resultSet.getString("nomeUezer"),
-                    resultSet.getString("situacaoUezer"),
-                    resultSet.getBoolean("aprovacaoUezer"),
-                    resultSet.getString("datacadUezer")
+                    resultSet.getString("idUzer"),
+                    resultSet.getString("nomeUzer"),
+                    resultSet.getString("situacaoUzer"),
+                    resultSet.getBoolean("aprovacaoUzer"),
+                    resultSet.getString("datacadUzer"),
+                    resultSet.getDouble("avaliacaoUzer")
                 };
                 model.addRow(rowData);
             }
@@ -83,19 +87,26 @@ public class GestaoUzer extends javax.swing.JFrame {
         btnBanirDesbanir = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Listagem de Uzers");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 29, 180, -1));
 
+        btnAprovarUzer.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         btnAprovarUzer.setText("Aprovar");
         btnAprovarUzer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAprovarUzerActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAprovarUzer, new org.netbeans.lib.awtextra.AbsoluteConstraints(749, 131, 150, -1));
 
+        btnAtualizarlistagem.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         btnAtualizarlistagem.setText("Atualizar listagem");
         btnAtualizarlistagem.setMaximumSize(new java.awt.Dimension(72, 23));
         btnAtualizarlistagem.setMinimumSize(new java.awt.Dimension(72, 23));
@@ -105,27 +116,31 @@ public class GestaoUzer extends javax.swing.JFrame {
                 btnAtualizarlistagemActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAtualizarlistagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(749, 172, 150, -1));
 
+        btnBanirDesbanir.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         btnBanirDesbanir.setText("Banir/Desbanir");
         btnBanirDesbanir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBanirDesbanirActionPerformed(evt);
             }
         });
+        getContentPane().add(btnBanirDesbanir, new org.netbeans.lib.awtextra.AbsoluteConstraints(749, 90, 150, -1));
 
+        jTable1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null}
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Id Uzer", "Nome Uzer", "Situação", "Aprovação", "Data de Cadastro"
+                "Id Uzer", "Nome Uzer", "Situação", "Aprovação", "Data de Cadastro", "Avaliação"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -138,46 +153,20 @@ public class GestaoUzer extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(255, 255, 255)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 658, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAprovarUzer, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBanirDesbanir, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAtualizarlistagem, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(btnBanirDesbanir)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAprovarUzer)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAtualizarlistagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(41, Short.MAX_VALUE))
-        );
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 72, 658, -1));
 
-        pack();
-        setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+        ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/fundoprograma2.png"));
+        Image image = icon.getImage();
+        jPanel1 = new javax.swing.JPanel(){
+            public void paintComponent(Graphics g){
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }};
+
+            getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 540));
+
+            pack();
+            setLocationRelativeTo(null);
+        }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtualizarlistagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarlistagemActionPerformed
         atualizarListagemUzers();
@@ -204,14 +193,14 @@ public class GestaoUzer extends javax.swing.JFrame {
     }
 
     private void updateSituacaoUsuario(int rowIndex, String novaSituacao) {
-        String idUezer = jTable1.getValueAt(rowIndex, 0).toString(); // Obtém o id do usuário selecionado
+        String idUzer = jTable1.getValueAt(rowIndex, 0).toString(); // Obtém o id do usuário selecionado
 
         try {
             // Atualiza o estado do usuário no banco de dados
-            String sql = "UPDATE Uzer SET situacaoUezer = ? WHERE idUezer = ?";
+            String sql = "UPDATE Uzer SET situacaoUzer = ? WHERE idUzer = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, novaSituacao);
-            statement.setString(2, idUezer);
+            statement.setString(2, idUzer);
             int rowsUpdated = statement.executeUpdate();
 
             if (rowsUpdated > 0) {
@@ -240,7 +229,7 @@ public class GestaoUzer extends javax.swing.JFrame {
             String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do Uzer selecionado
 
             // Atualiza a aprovação do Uzer no banco de dados
-            String sql = "UPDATE uzer SET aprovacaoUezer = ? WHERE idUezer = ?";
+            String sql = "UPDATE uzer SET aprovacaoUzer = ? WHERE idUzer = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setBoolean(1, !aprovacao);
             statement.setString(2, idUzer);
@@ -307,6 +296,7 @@ public class GestaoUzer extends javax.swing.JFrame {
     private javax.swing.JButton btnAtualizarlistagem;
     private javax.swing.JButton btnBanirDesbanir;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

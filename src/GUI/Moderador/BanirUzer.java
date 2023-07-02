@@ -27,7 +27,7 @@ public class BanirUzer extends javax.swing.JFrame {
     private String idSelecionado;
 
     /**
-     * Creates new form BanirUezer
+     * Creates new form BanirUzer
      */
     public BanirUzer() {
 
@@ -78,6 +78,7 @@ public class BanirUzer extends javax.swing.JFrame {
         jScrollPane1.setPreferredSize(new java.awt.Dimension(240, 90));
 
         txtMotivo.setColumns(20);
+        txtMotivo.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         txtMotivo.setLineWrap(true);
         txtMotivo.setRows(4);
         txtMotivo.setMinimumSize(new java.awt.Dimension(0, 0));
@@ -101,6 +102,7 @@ public class BanirUzer extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         txtId.setToolTipText("Confirme seu id");
+        txtId.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         txtId.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtIdFocusGained(evt);
@@ -113,6 +115,7 @@ public class BanirUzer extends javax.swing.JFrame {
         });
         getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 110, -1));
 
+        jButton1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         jButton1.setText("Banir");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,6 +124,7 @@ public class BanirUzer extends javax.swing.JFrame {
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 290, 90, -1));
 
+        jButton2.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         jButton2.setText("Voltar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,20 +158,21 @@ public class BanirUzer extends javax.swing.JFrame {
         // Atualizar a situação do usuário
         updateSituacaoUsuario(connection, Motivo, "Banido");
         JOptionPane.showMessageDialog(null, "O Uzer foi Banido da plataforma.");
+        this.dispose();
 
         // Fechar a conexão com o banco de dados
         ConnectionFactory.closeConnection(connection);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void updateSituacaoUsuario(Connection connection, String Motivo, String novaSituacao) {
-        String idUezer = idSelecionado;
+        String idUzer = idSelecionado;
 
         try {
-            String sql = "UPDATE Uzer SET situacaoUezer = ?, motivobanUzer = ? WHERE idUezer = ? ";
+            String sql = "UPDATE Uzer SET situacaoUzer = ?, motivobanUzer = ? WHERE idUzer = ? ";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, novaSituacao);
             statement.setString(2, Motivo);
-            statement.setString(3, idUezer);
+            statement.setString(3, idUzer);
 
             // Executar a atualização
             statement.executeUpdate();
@@ -178,7 +183,7 @@ public class BanirUzer extends javax.swing.JFrame {
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed

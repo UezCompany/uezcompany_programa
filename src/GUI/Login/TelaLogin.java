@@ -53,6 +53,8 @@ public class TelaLogin extends javax.swing.JFrame {
         txtId = new javax.swing.JFormattedTextField();
         jButton1 = new javax.swing.JButton();
         txtSenha = new javax.swing.JPasswordField();
+        showPasswordCheckBox = new javax.swing.JCheckBox();
+        jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -70,15 +72,24 @@ public class TelaLogin extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         txtId.setToolTipText("");
-        txtId.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+        txtId.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtId.setDragEnabled(true);
+        txtId.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
+        txtId.setInheritsPopupMenu(true);
+        txtId.setName(""); // NOI18N
+        txtId.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtIdMouseClicked(evt);
+            }
+        });
         txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdActionPerformed(evt);
             }
         });
-        getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 150, 180, -1));
+        getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 120, -1));
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Montserrat SemiBold", 1, 14)); // NOI18N
         jButton1.setText("Entrar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,23 +98,37 @@ public class TelaLogin extends javax.swing.JFrame {
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, -1, 23));
 
-        txtSenha.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+        txtSenha.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
         txtSenha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSenhaActionPerformed(evt);
             }
         });
-        getContentPane().add(txtSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 180, -1));
+        getContentPane().add(txtSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 140, -1));
+
+        showPasswordCheckBox.setBackground(new java.awt.Color(0, 0, 58));
+        showPasswordCheckBox.setText("jCheckBox1");
+        showPasswordCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showPasswordCheckBoxActionPerformed(evt);
+            }
+        });
+        getContentPane().add(showPasswordCheckBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 210, 20, -1));
+
+        jLabel6.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Mostrar senha");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 210, -1, 20));
 
         jLabel4.setFont(new java.awt.Font("Montserrat ExtraBold", 0, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Senha:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 190, 70, 20));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 70, 20));
 
         jLabel3.setFont(new java.awt.Font("Montserrat ExtraBold", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("ID:");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 30, 20));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 140, 30, 20));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/logintela.png"))); // NOI18N
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, -1));
@@ -134,16 +159,20 @@ public class TelaLogin extends javax.swing.JFrame {
 
                     String nomeFuncionario = rs.getString("nomeFuncionario");
                     String senhaFuncionario = rs.getString("senhaFuncionario");
-                    if (id.equals(idFuncionario) && senha.equals(senhaFuncionario)) {
+                    if (Integer.parseInt(id) == Integer.parseInt(idFuncionario) && senha.equals(senhaFuncionario)) {
                         JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeFuncionario + "!");
                         Homepage t = new Homepage();
                         t.setVisible(true);
                         this.dispose();
                     } else {
                         JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
+                        txtId.setText("");
+                        txtSenha.setText("");
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
+                    txtId.setText("");
+                    txtSenha.setText("");
                 }
             }
         } catch (SQLException ex) {
@@ -158,6 +187,19 @@ public class TelaLogin extends javax.swing.JFrame {
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdActionPerformed
+
+    private void txtIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtIdMouseClicked
+        txtId.setCaretPosition(0);
+    }//GEN-LAST:event_txtIdMouseClicked
+
+    private void showPasswordCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPasswordCheckBoxActionPerformed
+        if (showPasswordCheckBox.isSelected()) {
+            txtSenha.setEchoChar((char) 0);
+        } else {
+            txtSenha.setEchoChar('*');
+        }
+
+    }//GEN-LAST:event_showPasswordCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,6 +241,8 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JCheckBox showPasswordCheckBox;
     private javax.swing.JFormattedTextField txtId;
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables

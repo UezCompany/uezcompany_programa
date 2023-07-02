@@ -107,6 +107,7 @@ public class GestaoCliente extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela de gestão de clientes");
         setMinimumSize(new java.awt.Dimension(960, 540));
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N

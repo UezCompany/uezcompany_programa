@@ -82,16 +82,22 @@ public class AprovarCliente extends javax.swing.JFrame {
 
             // Adicionar as linhas à tabela
             while (resultSet.next()) {
+                boolean exibirCliente = resultSet.getBoolean("exibirCliente");
+                boolean reprovado = resultSet.getBoolean("reprovacaoCliente");
+                boolean aprovado = resultSet.getBoolean("aprovacaoCliente");
 
-                Object[] rowData = {
-                    resultSet.getString("idCliente"),
-                    resultSet.getString("datacadCliente"),
-                    "Oculto",
-                    resultSet.getString("cpfCliente"),
-                    resultSet.getBoolean("aprovacaoCliente")
-                };
-                model.addRow(rowData);
+                if (exibirCliente && (reprovado || (!reprovado && !aprovado))) {
+                    Object[] rowData = {
+                        resultSet.getString("idCliente"),
+                        resultSet.getString("datacadCliente"),
+                        "Oculto",
+                        resultSet.getString("cpfCliente"),
+                        reprovado
+                    };
+                    model.addRow(rowData);
+                }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Erro ao consultar dados do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -229,7 +235,7 @@ public class AprovarCliente extends javax.swing.JFrame {
                     .addComponent(jButton2)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jButton3)
-                    .addGap(18, 18, 18)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                     .addComponent(jButton5)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
@@ -256,17 +262,34 @@ public class AprovarCliente extends javax.swing.JFrame {
             return;
         }
 
+        String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
+
+        try {
+            String sql = "Select * from cliente where idCliente = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, idCliente);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                boolean aprovado = resultSet.getBoolean("aprovacaoCliente");
+                if (aprovado) {
+                    return;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         boolean aprovacao = (boolean) jTable1.getValueAt(selectedRow, 4); // Obtém a aprovação do cliente selecionado
 
         // Atualiza a aprovação do cliente selecionado
         try {
-            String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
-
             // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE cliente SET aprovacaoCliente = ? WHERE idCliente = ?";
+            String sql = "UPDATE cliente SET aprovacaoCliente = ?, exibirCliente = ? WHERE idCliente = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setBoolean(1, true);
-            statement.setString(2, idCliente);
+            statement.setBoolean(2, false);
+            statement.setString(3, idCliente);
             int rowsUpdated = statement.executeUpdate();
 
             if (rowsUpdated > 0) {
@@ -280,6 +303,7 @@ public class AprovarCliente extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Erro ao atualizar a aprovação do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+        atualizarListagemClientes();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -300,9 +324,9 @@ public class AprovarCliente extends javax.swing.JFrame {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
 
             // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE cliente SET aprovacaoCliente = ? WHERE idCliente = ?";
+            String sql = "UPDATE cliente SET reprovacaoCliente = ? WHERE idCliente = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setBoolean(1, false);
+            statement.setBoolean(1, true);
             statement.setString(2, idCliente);
             int rowsUpdated = statement.executeUpdate();
 
@@ -317,49 +341,50 @@ public class AprovarCliente extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Erro ao atualizar a aprovação do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+        atualizarListagemClientes();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-            int selectedRow = jTable1.getSelectedRow();
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Nenhum cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-
-    try {
-        String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
-
-        // Consultar o PDF do banco de dados
-        String sql = "SELECT historicocriminalCliente FROM cliente WHERE idCliente = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, idCliente);
-        ResultSet resultSet = statement.executeQuery();
-
-        if (resultSet.next()) {
-            // Obter o PDF do banco de dados
-            byte[] pdfBytes = resultSet.getBytes("historicocriminalCliente");
-
-            // Carregar o PDF como um documento
-            try (PDDocument document = Loader.loadPDF(pdfBytes)) {
-                PDFRenderer renderer = new PDFRenderer(document);
-                BufferedImage image = renderer.renderImage(0); // Renderiza a primeira página do PDF como uma imagem
-
-                JFrame frame = new JFrame("Visualizador de PDF");
-                frame.setSize(630, 891);//210 × 297
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-                PDFViewerPanel viewerPanel = new PDFViewerPanel(image);
-                frame.add(viewerPanel);
-
-                frame.setVisible(true);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Nenhum PDF encontrado para o cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Nenhum cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    } catch (SQLException | IOException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Erro ao obter o PDF do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
-    }
+
+        try {
+            String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
+
+            // Consultar o PDF do banco de dados
+            String sql = "SELECT historicocriminalCliente FROM cliente WHERE idCliente = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, idCliente);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                // Obter o PDF do banco de dados
+                byte[] pdfBytes = resultSet.getBytes("historicocriminalCliente");
+
+                // Carregar o PDF como um documento
+                try ( PDDocument document = Loader.loadPDF(pdfBytes)) {
+                    PDFRenderer renderer = new PDFRenderer(document);
+                    BufferedImage image = renderer.renderImage(0); // Renderiza a primeira página do PDF como uma imagem
+
+                    JFrame frame = new JFrame("Visualizador de PDF");
+                    frame.setSize(630, 891);//210 × 297
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                    PDFViewerPanel viewerPanel = new PDFViewerPanel(image);
+                    frame.add(viewerPanel);
+
+                    frame.setVisible(true);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Nenhum PDF encontrado para o cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao obter o PDF do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

@@ -72,7 +72,8 @@ public class GestaoCliente extends javax.swing.JFrame {
                     resultSet.getString("situacaoCliente"),
                     resultSet.getBoolean("aprovacaoCliente"),
                     resultSet.getString("datacadCliente"),
-                    resultSet.getDouble("avaliacaoCliente")
+                    resultSet.getDouble("avaliacaoCliente"),
+                    resultSet.getInt("quantidadepedidosCliente")
                 };
                 model.addRow(rowData);
             }
@@ -101,13 +102,10 @@ public class GestaoCliente extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela de gestão de clientes");
         setMinimumSize(new java.awt.Dimension(960, 540));
-        setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Listagem de Clientes");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 29, 200, -1));
 
         btnBanirDesbanir.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         btnBanirDesbanir.setText("Bloquear/Desbloquear");
@@ -116,7 +114,6 @@ public class GestaoCliente extends javax.swing.JFrame {
                 btnBanirDesbanirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnBanirDesbanir, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 90, 150, 30));
 
         btnAtualizarlistagem1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         btnAtualizarlistagem1.setText("Atualizar listagem");
@@ -125,22 +122,21 @@ public class GestaoCliente extends javax.swing.JFrame {
                 btnAtualizarlistagem1ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAtualizarlistagem1, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 170, 150, -1));
 
         jTable1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id Cliente", "Nome Cliente", "Situação", "Aprovação", "Data de Cadastro", "Avaliação"
+                "Id Cliente", "Nome Cliente", "Situação", "Aprovação", "Data de Cadastro", "Avaliação", "Quantidade de Pedidos"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -153,8 +149,6 @@ public class GestaoCliente extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 700, 410));
-
         ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/fundoprograma2.png"));
         Image image = icon.getImage();
         jPanel1 = new javax.swing.JPanel(){
@@ -162,7 +156,42 @@ public class GestaoCliente extends javax.swing.JFrame {
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }};
 
-            getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 540));
+            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+            getContentPane().setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(30, 30, 30)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 727, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnBanirDesbanir, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAtualizarlistagem1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(40, 40, 40))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addGap(38, 38, 38)
+                            .addComponent(btnBanirDesbanir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(50, 50, 50)
+                            .addComponent(btnAtualizarlistagem1)
+                            .addGap(348, 348, 348))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(60, 60, 60)))
+                    .addGap(0, 0, Short.MAX_VALUE))
+            );
 
             pack();
             setLocationRelativeTo(null);

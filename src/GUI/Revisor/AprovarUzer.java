@@ -4,9 +4,28 @@
  */
 package GUI.Revisor;
 
+import Factory.ConnectionFactory;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
+import org.apache.pdfbox.Loader;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
 /**
  *
@@ -16,9 +35,73 @@ public class AprovarUzer extends javax.swing.JFrame {
 
     /**
      * Creates new form AceitarUzer
+     *
+     *
      */
+    private class PDFViewerPanel extends JPanel {
+
+        private BufferedImage image;
+
+        public PDFViewerPanel(BufferedImage image) {
+            this.image = image;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+
+    private Connection connection;
+
     public AprovarUzer() {
+        try {
+            // Define o look and feel Nimbus
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        connection = ConnectionFactory.getConnection();
         initComponents();
+        atualizarListagemUzers();
+    }
+
+    private void atualizarListagemUzers() {
+        try {
+            // Consultar dados do banco de dados
+            String sql = "SELECT * FROM uzer";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            // Obter o modelo de tabela
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+            // Limpar todas as linhas existentes na tabela
+            model.setRowCount(0);
+
+            // Adicionar as linhas à tabela
+            while (resultSet.next()) {
+                boolean reprovado = resultSet.getBoolean("reprovacaoUzer");
+                boolean aprovado = resultSet.getBoolean("aprovacaoUzer");
+
+                if ((reprovado || (!reprovado && !aprovado))) {
+                    Object[] rowData = {
+                        resultSet.getString("idUzer"),
+                        resultSet.getString("datacadUzer"),
+                        "Oculto",
+                        resultSet.getString("cpfUzer"),
+                        reprovado,
+                        resultSet.getString("nomeUzer")
+                    };
+                    model.addRow(rowData);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao consultar dados do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -30,28 +113,131 @@ public class AprovarUzer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton4 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+
+        jButton4.setText("jButton4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela de Aprovação");
         setResizable(false);
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/aprovaruzer.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/fundoprograma2.png"));
         Image image = icon.getImage();
         jPanel1 = new javax.swing.JPanel(){
             public void paintComponent(Graphics g){
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }};
 
+            jTable1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+            jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null}
+                },
+                new String [] {
+                    "ID", "Data de Cadastro", "Antecedentes", "CPF", "Reprovado", "Nome"
+                }
+            ) {
+                Class[] types = new Class [] {
+                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
+                };
+                boolean[] canEdit = new boolean [] {
+                    false, false, false, false, false, false
+                };
+
+                public Class getColumnClass(int columnIndex) {
+                    return types [columnIndex];
+                }
+
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return canEdit [columnIndex];
+                }
+            });
+            jScrollPane1.setViewportView(jTable1);
+
+            jButton1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+            jButton1.setText("Aprovar");
+            jButton1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton1ActionPerformed(evt);
+                }
+            });
+
+            jButton2.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+            jButton2.setText("Reprovar");
+            jButton2.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton2ActionPerformed(evt);
+                }
+            });
+
+            jButton3.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+            jButton3.setText("Atualizar");
+            jButton3.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton3ActionPerformed(evt);
+                }
+            });
+
+            jLabel1.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
+            jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+            jLabel1.setText("Aprovação de Uzers");
+
+            jButton5.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
+            jButton5.setText("Exibir pdf");
+            jButton5.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton5ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
             jPanel1.setLayout(jPanel1Layout);
             jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 960, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(47, 47, 47)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                        .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGap(34, 34, 34))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addGap(233, 233, 233))
             );
             jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 546, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGap(33, 33, 33)
+                    .addComponent(jLabel1)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(30, 30, 30))
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(106, 106, 106)
+                    .addComponent(jButton1)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jButton2)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jButton3)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jButton5)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -68,6 +254,139 @@ public class AprovarUzer extends javax.swing.JFrame {
             pack();
             setLocationRelativeTo(null);
         }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Nenhum Uzer selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do Uzer selecionado
+
+        try {
+            String sql = "Select * from Uzer where idUzer = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, idUzer);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                boolean aprovado = resultSet.getBoolean("aprovacaoUzer");
+                if (aprovado) {
+                    return;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        boolean aprovacao = (boolean) jTable1.getValueAt(selectedRow, 4); // Obtém a aprovação do Uzer selecionado
+
+        // Atualiza a aprovação do Uzer selecionado
+        try {
+            // Atualiza a aprovação do Uzer no banco de dados
+            String sql = "UPDATE Uzer SET aprovacaoUzer = ?, reprovacaoUzer = ? WHERE idUzer = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setBoolean(1, true);
+            statement.setBoolean(2, false);
+            statement.setString(3, idUzer);
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                // Atualiza a tabela com a nova aprovação do Uzer
+                jTable1.setValueAt(false, selectedRow, 4);
+                JOptionPane.showMessageDialog(this, "O Uzer foi aprovado");
+            } else {
+                JOptionPane.showMessageDialog(this, "Falha ao atualizar a aprovação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar a aprovação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        atualizarListagemUzers();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        atualizarListagemUzers();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Nenhum Uzer selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean aprovacao = (boolean) jTable1.getValueAt(selectedRow, 4); // Obtém a aprovação do Uzer selecionado
+
+        // Atualiza a aprovação do Uzer selecionado
+        try {
+            String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do Uzer selecionado
+
+            // Atualiza a aprovação do Uzer no banco de dados
+            String sql = "UPDATE Uzer SET reprovacaoUzer = ?, aprovacaoUzer = ? WHERE idUzer = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setBoolean(1, true);
+            statement.setBoolean(2, false);
+            statement.setString(3, idUzer);
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                // Atualiza a tabela com a nova aprovação do Uzer
+                jTable1.setValueAt(true, selectedRow, 4);
+                JOptionPane.showMessageDialog(this, "O Uzer foi reprovado");
+            } else {
+                JOptionPane.showMessageDialog(this, "Falha ao atualizar a aprovação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar a aprovação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        atualizarListagemUzers();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Nenhum Uzer selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do Uzer selecionado
+
+            // Consultar o PDF do banco de dados
+            String sql = "SELECT historicocriminalUzer FROM Uzer WHERE idUzer = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, idUzer);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                // Obter o PDF do banco de dados
+                byte[] pdfBytes = resultSet.getBytes("historicocriminalUzer");
+
+                // Carregar o PDF como um documento
+                try ( PDDocument document = Loader.loadPDF(pdfBytes)) {
+                    PDFRenderer renderer = new PDFRenderer(document);
+                    BufferedImage image = renderer.renderImage(0); // Renderiza a primeira página do PDF como uma imagem
+
+                    JFrame frame = new JFrame("Visualizador de PDF");
+                    frame.setSize(630, 891);//210 × 297
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                    PDFViewerPanel viewerPanel = new PDFViewerPanel(image);
+                    frame.add(viewerPanel);
+
+                    frame.setVisible(true);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Nenhum PDF encontrado para o Uzer selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao obter o PDF do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -96,6 +415,12 @@ public class AprovarUzer extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -106,6 +431,14 @@ public class AprovarUzer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

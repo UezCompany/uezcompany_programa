@@ -82,17 +82,17 @@ public class AprovarCliente extends javax.swing.JFrame {
 
             // Adicionar as linhas à tabela
             while (resultSet.next()) {
-                boolean exibirCliente = resultSet.getBoolean("exibirCliente");
                 boolean reprovado = resultSet.getBoolean("reprovacaoCliente");
                 boolean aprovado = resultSet.getBoolean("aprovacaoCliente");
 
-                if (exibirCliente && (reprovado || (!reprovado && !aprovado))) {
+                if ((reprovado || (!reprovado && !aprovado))) {
                     Object[] rowData = {
                         resultSet.getString("idCliente"),
                         resultSet.getString("datacadCliente"),
                         "Oculto",
                         resultSet.getString("cpfCliente"),
-                        reprovado
+                        reprovado,
+                        resultSet.getString("nomeCliente")
                     };
                     model.addRow(rowData);
                 }
@@ -139,20 +139,20 @@ public class AprovarCliente extends javax.swing.JFrame {
             jTable1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null},
-                    {null, null, null, null, null}
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null},
+                    {null, null, null, null, null, null}
                 },
                 new String [] {
-                    "ID", "Data de Cadastro", "Antecedentes", "CPF", "Reprovado"
+                    "ID", "Data de Cadastro", "Antecedentes", "CPF", "Reprovado", "Nome"
                 }
             ) {
                 Class[] types = new Class [] {
-                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+                    java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class
                 };
                 boolean[] canEdit = new boolean [] {
-                    false, false, false, false, false
+                    false, false, false, false, false, false
                 };
 
                 public Class getColumnClass(int columnIndex) {
@@ -285,7 +285,7 @@ public class AprovarCliente extends javax.swing.JFrame {
         // Atualiza a aprovação do cliente selecionado
         try {
             // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE cliente SET aprovacaoCliente = ?, exibirCliente = ? WHERE idCliente = ?";
+            String sql = "UPDATE cliente SET aprovacaoCliente = ?, reprovacaoCliente = ? WHERE idCliente = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setBoolean(1, true);
             statement.setBoolean(2, false);
@@ -324,10 +324,11 @@ public class AprovarCliente extends javax.swing.JFrame {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
 
             // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE cliente SET reprovacaoCliente = ? WHERE idCliente = ?";
+            String sql = "UPDATE cliente SET reprovacaoCliente = ?, aprovacaoCliente = ? WHERE idCliente = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setBoolean(1, true);
-            statement.setString(2, idCliente);
+            statement.setBoolean(2, false);
+            statement.setString(3, idCliente);
             int rowsUpdated = statement.executeUpdate();
 
             if (rowsUpdated > 0) {

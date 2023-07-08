@@ -29,7 +29,6 @@ public class GestaoCliente extends javax.swing.JFrame {
     /**
      * Creates new form GestaoCliente
      */
-
     public GestaoCliente() {
         try {
             // Define o look and feel Nimbus
@@ -55,7 +54,7 @@ public class GestaoCliente extends javax.swing.JFrame {
     private void atualizarListagemClientes() {
         try {
             // Consultar dados do banco de dados
-            String sql = "SELECT * FROM cliente";
+            String sql = "SELECT * FROM cliente WHERE aprovacaoCliente = true"; // Adiciona a cláusula WHERE para buscar apenas clientes aprovados
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -93,7 +92,6 @@ public class GestaoCliente extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        btnAprovarCliente = new javax.swing.JButton();
         btnBanirDesbanir = new javax.swing.JButton();
         btnAtualizarlistagem1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -111,23 +109,14 @@ public class GestaoCliente extends javax.swing.JFrame {
         jLabel1.setText("Listagem de Clientes");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 29, 200, -1));
 
-        btnAprovarCliente.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
-        btnAprovarCliente.setText("Aprovar");
-        btnAprovarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAprovarClienteActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnAprovarCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 130, 150, -1));
-
         btnBanirDesbanir.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
-        btnBanirDesbanir.setText("Banir/Desbanir");
+        btnBanirDesbanir.setText("Bloquear/Desbloquear");
         btnBanirDesbanir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBanirDesbanirActionPerformed(evt);
             }
         });
-        getContentPane().add(btnBanirDesbanir, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 90, 150, -1));
+        getContentPane().add(btnBanirDesbanir, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 90, 150, 30));
 
         btnAtualizarlistagem1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         btnAtualizarlistagem1.setText("Atualizar listagem");
@@ -178,38 +167,6 @@ public class GestaoCliente extends javax.swing.JFrame {
             pack();
             setLocationRelativeTo(null);
         }// </editor-fold>//GEN-END:initComponents
-
-    private void btnAprovarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAprovarClienteActionPerformed
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Nenhum cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        boolean aprovacao = (boolean) jTable1.getValueAt(selectedRow, 3); // Obtém a aprovação do cliente selecionado
-
-        // Atualiza a aprovação do cliente selecionado
-        try {
-            String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
-
-            // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE cliente SET aprovacaoCliente = ? WHERE idCliente = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setBoolean(1, !aprovacao);
-            statement.setString(2, idCliente);
-            int rowsUpdated = statement.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                // Atualiza a tabela com a nova aprovação do cliente
-                jTable1.setValueAt(!aprovacao, selectedRow, 3);
-            } else {
-                JOptionPane.showMessageDialog(this, "Falha ao atualizar a aprovação do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar a aprovação do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnAprovarClienteActionPerformed
 
     private void btnBanirDesbanirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanirDesbanirActionPerformed
         int selectedRow = jTable1.getSelectedRow();
@@ -305,7 +262,6 @@ public class GestaoCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAprovarCliente;
     private javax.swing.JButton btnAtualizarlistagem1;
     private javax.swing.JButton btnBanirDesbanir;
     private javax.swing.JLabel jLabel1;

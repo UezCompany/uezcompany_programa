@@ -44,7 +44,7 @@ public class GestaoUzer extends javax.swing.JFrame {
     private void atualizarListagemUzers() {
         try {
             // Consultar dados do banco de dados
-            String sql = "SELECT * FROM uzer";
+            String sql = "SELECT * FROM uzer WHERE aprovacaoUzer = true";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
 
@@ -82,7 +82,6 @@ public class GestaoUzer extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        btnAprovarUzer = new javax.swing.JButton();
         btnAtualizarlistagem = new javax.swing.JButton();
         btnBanirDesbanir = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -97,15 +96,6 @@ public class GestaoUzer extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Listagem de Uzers");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(255, 29, 180, -1));
-
-        btnAprovarUzer.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
-        btnAprovarUzer.setText("Aprovar");
-        btnAprovarUzer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAprovarUzerActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnAprovarUzer, new org.netbeans.lib.awtextra.AbsoluteConstraints(749, 131, 150, -1));
 
         btnAtualizarlistagem.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
         btnAtualizarlistagem.setText("Atualizar listagem");
@@ -216,38 +206,6 @@ public class GestaoUzer extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBanirDesbanirActionPerformed
 
-    private void btnAprovarUzerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAprovarUzerActionPerformed
-        int selectedRow = jTable1.getSelectedRow();
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Nenhum Uzer selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        boolean aprovacao = (boolean) jTable1.getValueAt(selectedRow, 3); // Obtém a aprovação do Uzer selecionado
-
-        // Atualiza a aprovação do Uzer selecionado
-        try {
-            String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do Uzer selecionado
-
-            // Atualiza a aprovação do Uzer no banco de dados
-            String sql = "UPDATE uzer SET aprovacaoUzer = ? WHERE idUzer = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setBoolean(1, !aprovacao);
-            statement.setString(2, idUzer);
-            int rowsUpdated = statement.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                // Atualiza a tabela com a nova aprovação do Uzer
-                jTable1.setValueAt(!aprovacao, selectedRow, 3);
-            } else {
-                JOptionPane.showMessageDialog(this, "Falha ao atualizar a aprovação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar a aprovação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btnAprovarUzerActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -293,7 +251,6 @@ public class GestaoUzer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAprovarUzer;
     private javax.swing.JButton btnAtualizarlistagem;
     private javax.swing.JButton btnBanirDesbanir;
     private javax.swing.JLabel jLabel1;

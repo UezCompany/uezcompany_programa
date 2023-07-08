@@ -200,7 +200,7 @@ public class GestaoUzer extends javax.swing.JFrame {
             String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do usuário selecionado
             BanirUzer banirUzerFrame = new BanirUzer(idUzer); // Cria a tela BanirUzer com o ID como parâmetro
             banirUzerFrame.setVisible(true); // Exibe a tela BanirUzer
-        } else if (situacao.equals("Banido")) {
+        } else if (situacao.equals("Bloqueado")) {
             updateSituacaoUsuario(selectedRow, "Ativo");
             JOptionPane.showMessageDialog(null, "O Uzer foi Ativado na plataforma.");
         }

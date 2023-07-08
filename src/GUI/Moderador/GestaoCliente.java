@@ -211,7 +211,7 @@ public class GestaoCliente extends javax.swing.JFrame {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do usuário selecionado
             BanirCliente banirClienteFrame = new BanirCliente(idCliente); // Cria a tela BanirCliente com o ID como parâmetro
             banirClienteFrame.setVisible(true); // Exibe a tela BanirCliente
-        } else if (situacao.equals("Banido")) {
+        } else if (situacao.equals("Bloqueado")) {
             updateSituacaoUsuario(selectedRow, "Ativo");
             JOptionPane.showMessageDialog(null, "O Cliente foi Ativado na plataforma.");
         }

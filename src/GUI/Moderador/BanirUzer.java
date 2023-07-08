@@ -117,7 +117,7 @@ public class BanirUzer extends javax.swing.JFrame {
         getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 110, -1));
 
         jButton1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
-        jButton1.setText("Banir");
+        jButton1.setText("Bloquear");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -136,8 +136,8 @@ public class BanirUzer extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Montserrat", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Digite o motivo do banimento do Uzer!");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 300, 44));
+        jLabel2.setText("Digite o motivo do bloqueio do Uzer!");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 270, 44));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma1.png"))); // NOI18N
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -157,8 +157,8 @@ public class BanirUzer extends javax.swing.JFrame {
         Connection connection = ConnectionFactory.getConnection();
 
         // Atualizar a situação do usuário
-        updateSituacaoUsuario(connection, Motivo, "Banido");
-        JOptionPane.showMessageDialog(null, "O Uzer foi Banido da plataforma.");
+        updateSituacaoUsuario(connection, Motivo, "Bloqueado");
+        JOptionPane.showMessageDialog(null, "O Uzer foi Bloqueado da plataforma.");
         this.dispose();
 
         // Fechar a conexão com o banco de dados

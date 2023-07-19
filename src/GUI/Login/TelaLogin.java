@@ -64,6 +64,11 @@ public class TelaLogin extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela de Login");
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         try {
@@ -87,6 +92,11 @@ public class TelaLogin extends javax.swing.JFrame {
                 txtIdActionPerformed(evt);
             }
         });
+        txtId.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtIdKeyPressed(evt);
+            }
+        });
         getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 120, -1));
 
         jButton1.setFont(new java.awt.Font("Montserrat SemiBold", 1, 14)); // NOI18N
@@ -94,6 +104,11 @@ public class TelaLogin extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+        jButton1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1KeyPressed(evt);
             }
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 290, -1, 23));
@@ -104,7 +119,12 @@ public class TelaLogin extends javax.swing.JFrame {
                 txtSenhaActionPerformed(evt);
             }
         });
-        getContentPane().add(txtSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 140, -1));
+        txtSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSenhaKeyPressed(evt);
+            }
+        });
+        getContentPane().add(txtSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 120, -1));
 
         showPasswordCheckBox.setBackground(new java.awt.Color(0, 0, 58));
         showPasswordCheckBox.setText("jCheckBox1");
@@ -145,7 +165,7 @@ public class TelaLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    void fazerLogin() {
         String id = txtId.getText();
         String senha = new String(txtSenha.getPassword());
 
@@ -178,6 +198,10 @@ public class TelaLogin extends javax.swing.JFrame {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        fazerLogin();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
@@ -200,6 +224,26 @@ public class TelaLogin extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_showPasswordCheckBoxActionPerformed
+
+    private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
+
+    }//GEN-LAST:event_jButton1KeyPressed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+
+    }//GEN-LAST:event_formKeyPressed
+
+    private void txtSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSenhaKeyPressed
+        if (evt.getKeyCode() == 10) {
+            fazerLogin();
+        }
+    }//GEN-LAST:event_txtSenhaKeyPressed
+
+    private void txtIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdKeyPressed
+        if (evt.getKeyCode() == 10) {
+            fazerLogin();
+        }
+    }//GEN-LAST:event_txtIdKeyPressed
 
     /**
      * @param args the command line arguments

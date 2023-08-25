@@ -7,15 +7,18 @@ package GUI.Moderador;
 import Factory.ConnectionFactory;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -23,7 +26,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GestaoUzer extends javax.swing.JFrame {
 
-    private Connection connection;
 
     /**
      * Creates new form GestaoUzer
@@ -35,7 +37,6 @@ public class GestaoUzer extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        connection = ConnectionFactory.getConnection();
         initComponents();
         atualizarListagemUzers();
 
@@ -43,33 +44,62 @@ public class GestaoUzer extends javax.swing.JFrame {
 
     private void atualizarListagemUzers() {
         try {
-            // Consultar dados do banco de dados
-            String sql = "SELECT * FROM uzer WHERE aprovacaoUzer = true";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+            // Defina a URL da sua API para obter os uzers
+            String apiUrl = "http://localhost:3333/api/uzers";
 
-            // Obter o modelo de tabela
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            // Limpar todas as linhas existentes na tabela
-            model.setRowCount(0);
+            // Configurar a conexão para um método GET
+            connection.setRequestMethod("GET");
 
-            // Adicionar as linhas à tabela
-            while (resultSet.next()) {
-                Object[] rowData = {
-                    resultSet.getString("idUzer"),
-                    resultSet.getString("nomeUzer"),
-                    resultSet.getString("situacaoUzer"),
-                    resultSet.getBoolean("aprovacaoUzer"),
-                    resultSet.getString("datacadUzer"),
-                    resultSet.getDouble("avaliacaoUzer"),
-                    resultSet.getInt("qtdpedidosfeitosUzer")
-                };
-                model.addRow(rowData);
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Ler a resposta JSON
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // Parse do JSON de resposta
+                JSONArray jsonArray = new JSONArray(response.toString());
+
+                // Obter o modelo de tabela
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+                // Limpar todas as linhas existentes na tabela
+                model.setRowCount(0);
+
+                // Adicionar as linhas à tabela
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    // Trata a situação do uzer que é retornada como string "null"
+                    Object[] rowData = {
+                        jsonObject.getString("_id"),
+                        jsonObject.getString("nomeUzer"),
+                        jsonObject.optString("situacaoUzer"),
+                        jsonObject.getBoolean("aprovacaoUzer"),
+                        jsonObject.getString("datacadUzer"),
+                        jsonObject.getDouble("avaliacaoUzer"),
+                        jsonObject.getInt("quantidadepedidosUzer")
+                    };
+                    model.addRow(rowData);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao obter dados da APIII.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao consultar dados do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao obter dados da API.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -87,6 +117,7 @@ public class GestaoUzer extends javax.swing.JFrame {
         btnAtualizarlistagem = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -139,48 +170,61 @@ public class GestaoUzer extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(257, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 466, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-                        .addGap(202, 202, 202))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnBanirDesbanir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAtualizarlistagem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(61, 61, 61))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jLabel1)
-                        .addGap(38, 38, 38)
-                        .addComponent(btnBanirDesbanir))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(172, 172, 172)
-                        .addComponent(btnAtualizarlistagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(41, Short.MAX_VALUE))
-        );
+        jPanel1.setLayout(new java.awt.CardLayout());
 
-        pack();
-        setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+        ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/fundoprograma2.png"));
+        Image image = icon.getImage();
+        jPanel1 = new javax.swing.JPanel(){
+            public void paintComponent(Graphics g){
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }};
+
+            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+            getContentPane().setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap(257, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 466, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(39, 39, 39)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+                            .addGap(202, 202, 202))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnBanirDesbanir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAtualizarlistagem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGap(61, 61, 61))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 960, Short.MAX_VALUE))
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(29, 29, 29)
+                            .addComponent(jLabel1)
+                            .addGap(38, 38, 38)
+                            .addComponent(btnBanirDesbanir))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(172, 172, 172)
+                            .addComponent(btnAtualizarlistagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(72, 72, 72)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addContainerGap(41, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE))
+            );
+
+            pack();
+            setLocationRelativeTo(null);
+        }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtualizarlistagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarlistagemActionPerformed
         atualizarListagemUzers();
@@ -207,26 +251,47 @@ public class GestaoUzer extends javax.swing.JFrame {
     }
 
     private void updateSituacaoUsuario(int rowIndex, String novaSituacao) {
-        String idUzer = jTable1.getValueAt(rowIndex, 0).toString(); // Obtém o id do usuário selecionado
+        String idUzer = jTable1.getValueAt(rowIndex, 0).toString(); // Obtém o id do uzer selecionado
 
         try {
-            // Atualiza o estado do usuário no banco de dados
-            String sql = "UPDATE Uzer SET situacaoUzer = ? WHERE idUzer = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, novaSituacao);
-            statement.setString(2, idUzer);
-            int rowsUpdated = statement.executeUpdate();
+            // Defina a URL da sua API para atualizar a situação do uzer
+            String apiUrl = "http://localhost:3333/api/uzers/" + idUzer;
+            
+            // Crie os parâmetros do JSON para atualizar a situação
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("situacaoUzer", novaSituacao);
 
-            if (rowsUpdated > 0) {
-                // Atualiza a tabela com a nova situação do usuário
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Configurar a conexão para um método PUT
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            // Escrever os parâmetros JSON na requisição
+            try ( OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonParams.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Atualiza a tabela com a nova situação do uzer
                 jTable1.setValueAt(novaSituacao, rowIndex, 2);
             } else {
-                JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_btnBanirDesbanirActionPerformed
 
     /**
@@ -277,6 +342,7 @@ public class GestaoUzer extends javax.swing.JFrame {
     private javax.swing.JButton btnAtualizarlistagem;
     private javax.swing.JButton btnBanirDesbanir;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

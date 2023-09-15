@@ -4,27 +4,26 @@
  */
 package GUI.Moderador;
 
-import Factory.ConnectionFactory;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
  * @author bruna
  */
 public class GestaoCliente extends javax.swing.JFrame {
-
-    private Connection connection;
 
     /**
      * Creates new form GestaoCliente
@@ -36,7 +35,6 @@ public class GestaoCliente extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        connection = ConnectionFactory.getConnection();
         String imagePath = "../Imagem/fundoprograma2.png";
         URL imageURL = getClass().getResource(imagePath);
         if (imageURL == null) {
@@ -53,33 +51,64 @@ public class GestaoCliente extends javax.swing.JFrame {
 
     private void atualizarListagemClientes() {
         try {
-            // Consultar dados do banco de dados
-            String sql = "SELECT * FROM cliente WHERE aprovacaoCliente = true"; // Adiciona a cláusula WHERE para buscar apenas clientes aprovados
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+            // Defina a URL da sua API para obter os clientes
+            String apiUrl = "http://localhost:3333/api/clientes";
 
-            // Obter o modelo de tabela
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            // Limpar todas as linhas existentes na tabela
-            model.setRowCount(0);
+            // Configurar a conexão para um método GET
+            connection.setRequestMethod("GET");
 
-            // Adicionar as linhas à tabela
-            while (resultSet.next()) {
-                Object[] rowData = {
-                    resultSet.getString("idCliente"),
-                    resultSet.getString("nomeCliente"),
-                    resultSet.getString("situacaoCliente"),
-                    resultSet.getBoolean("aprovacaoCliente"),
-                    resultSet.getString("datacadCliente"),
-                    resultSet.getDouble("avaliacaoCliente"),
-                    resultSet.getInt("quantidadepedidosCliente")
-                };
-                model.addRow(rowData);
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Ler a resposta JSON
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // Parse do JSON de resposta
+                JSONArray jsonArray = new JSONArray(response.toString());
+
+                // Obter o modelo de tabela
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+                // Limpar todas as linhas existentes na tabela
+                model.setRowCount(0);
+
+                // Adicionar as linhas à tabela
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    // Trata a situação do cliente que é retornada como string "null"
+
+
+                    Object[] rowData = {
+                        jsonObject.getString("_id"),
+                        jsonObject.getString("nomeCliente"),
+                        jsonObject.optString("situacaoCliente"),
+                        jsonObject.getBoolean("aprovacaoCliente"),
+                        jsonObject.getString("datacadCliente"),
+                        jsonObject.getDouble("avaliacaoCliente"),
+                        jsonObject.getInt("quantidadepedidosCliente")
+                    };
+                    model.addRow(rowData);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao obter dados da API.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao consultar dados do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao obter dados da API.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -148,6 +177,8 @@ public class GestaoCliente extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTable1);
+
+        jPanel1.setLayout(new java.awt.CardLayout());
 
         ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/fundoprograma2.png"));
         Image image = icon.getImage();
@@ -218,23 +249,43 @@ public class GestaoCliente extends javax.swing.JFrame {
     }
 
     private void updateSituacaoUsuario(int rowIndex, String novaSituacao) {
-        String idUezer = jTable1.getValueAt(rowIndex, 0).toString(); // Obtém o id do usuário selecionado
+        String idCliente = jTable1.getValueAt(rowIndex, 0).toString(); // Obtém o id do cliente selecionado
 
         try {
-            // Atualiza o estado do usuário no banco de dados
-            String sql = "UPDATE cliente SET situacaoCliente = ? WHERE idCliente = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, novaSituacao);
-            statement.setString(2, idUezer);
-            int rowsUpdated = statement.executeUpdate();
+            // Defina a URL da sua API para atualizar a situação do cliente
+            String apiUrl = "http://localhost:3333/api/clientes/" + idCliente;
 
-            if (rowsUpdated > 0) {
-                // Atualiza a tabela com a nova situação do usuário
+            // Crie os parâmetros do JSON para atualizar a situação
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("situacaoCliente", novaSituacao);
+
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Configurar a conexão para um método PUT
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            // Escrever os parâmetros JSON na requisição
+            try ( OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonParams.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Atualiza a tabela com a nova situação do cliente
                 jTable1.setValueAt(novaSituacao, rowIndex, 2);
             } else {
                 JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
         }

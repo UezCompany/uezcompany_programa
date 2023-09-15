@@ -11,12 +11,16 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.sql.Connection;
 
 import Factory.ConnectionFactory;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.json.JSONObject;
 
 /**
  *
@@ -157,7 +161,7 @@ public class BanirCliente extends javax.swing.JFrame {
         Connection connection = ConnectionFactory.getConnection();
 
         // Atualizar a situação do usuário
-        updateSituacaoUsuario(connection, Motivo, "Bloqueado");
+        updateSituacaoUsuario(idSelecionado, Motivo, "Bloqueado");
         JOptionPane.showMessageDialog(null, "O Cliente foi Bloqueado da plataforma.");
         this.dispose();
 
@@ -165,23 +169,49 @@ public class BanirCliente extends javax.swing.JFrame {
         ConnectionFactory.closeConnection(connection);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void updateSituacaoUsuario(Connection connection, String Motivo, String novaSituacao) {
-        String idUezer = idSelecionado;
-
+    private void updateSituacaoUsuario(String idCliente, String Motivo, String novaSituacao) {
         try {
-            String sql = "UPDATE cliente SET situacaoCliente = ?, motivobanCliente = ? WHERE idCliente = ? ";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, novaSituacao);
-            statement.setString(2, Motivo);
-            statement.setString(3, idUezer);
+            // Defina a URL da sua API para atualizar a situação do cliente
+            String apiUrl = "http://localhost:3333/api/clientes/" + idCliente;
 
-            // Executar a atualização
-            statement.executeUpdate();
-        } catch (SQLException e) {
+            // Crie os parâmetros do JSON para atualizar a situação e o motivo
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("situacaoCliente", novaSituacao);
+            jsonParams.put("motivobanCliente", Motivo);
+
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Configurar a conexão para um método PUT
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            // Escrever os parâmetros JSON na requisição
+            try ( OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonParams.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Atualiza a tabela ou realize outras ações conforme necessário
+                // Exemplo: jTable1.setValueAt(novaSituacao, rowIndex, 2);
+                JOptionPane.showMessageDialog(null, "Situação do Cliente atualizada com sucesso.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do usuário.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();

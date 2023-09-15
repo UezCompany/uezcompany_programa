@@ -15,6 +15,16 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.json.JSONObject;
+
 /**
  *
  * @author renat
@@ -165,39 +175,66 @@ public class TelaLogin extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    void fazerLogin() {
+    private void fazerLogin() {
         String id = txtId.getText();
         String senha = new String(txtSenha.getPassword());
 
-        try ( Connection conn = ConnectionFactory.getConnection();  Statement stmt = conn.createStatement()) {
+        try {
+            String apiUrl = "http://localhost:3333/api/funcionario/login";
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("idFuncionario", Integer.parseInt(id));
+            jsonParams.put("senhaFuncionario", senha);
 
-            String query = "SELECT * FROM funcionario WHERE idFuncionario = '" + id + "' AND senhaFuncionario = '" + senha + "'";
+            HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
 
-            try ( ResultSet rs = stmt.executeQuery(query)) {
-                if (rs.next()) {
-                    String idFuncionario = rs.getString("idFuncionario");
-
-                    String nomeFuncionario = rs.getString("nomeFuncionario");
-                    String senhaFuncionario = rs.getString("senhaFuncionario");
-                    if (Integer.parseInt(id) == Integer.parseInt(idFuncionario) && senha.equals(senhaFuncionario)) {
-                        JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeFuncionario + "!");
-                        Homepage t = new Homepage();
-                        t.setVisible(true);
-                        this.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
-                        txtId.setText("");
-                        txtSenha.setText("");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
-                    txtId.setText("");
-                    txtSenha.setText("");
-                }
+            try ( OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonParams.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                processarResposta(connection);
+            } else {
+                mostrarMensagemErro();
+            }
+
+            connection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    private void processarResposta(HttpURLConnection connection) throws Exception {
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        JSONObject jsonResponse = new JSONObject(response.toString());
+        String nomeFuncionario = jsonResponse.getString("nomeFuncionario");
+
+        JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeFuncionario + "!");
+        abrirHomepage();
+        this.dispose();
+    }
+
+    private void mostrarMensagemErro() {
+        JOptionPane.showMessageDialog(null, "Usuário e/ou senha incorretos.");
+        txtId.setText("");
+        txtSenha.setText("");
+    }
+
+    private void abrirHomepage() {
+        Homepage t = new Homepage();
+        t.setVisible(true);
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

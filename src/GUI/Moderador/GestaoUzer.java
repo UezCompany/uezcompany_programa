@@ -45,7 +45,7 @@ public class GestaoUzer extends javax.swing.JFrame {
     private void atualizarListagemUzers() {
         try {
             // Defina a URL da sua API para obter os uzers
-            String apiUrl = "http://localhost:3333/api/uzers";
+            String apiUrl = "http://localhost:3333/api/funcionariosSearch/uzers";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -53,6 +53,7 @@ public class GestaoUzer extends javax.swing.JFrame {
 
             // Configurar a conexão para um método GET
             connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
 
             int responseCode = connection.getResponseCode();
 
@@ -82,12 +83,12 @@ public class GestaoUzer extends javax.swing.JFrame {
                     // Trata a situação do uzer que é retornada como string "null"
                     Object[] rowData = {
                         jsonObject.getString("_id"),
-                        jsonObject.getString("nomeUzer"),
-                        jsonObject.optString("situacaoUzer"),
-                        jsonObject.getBoolean("aprovacaoUzer"),
-                        jsonObject.getString("datacadUzer"),
-                        jsonObject.getDouble("avaliacaoUzer"),
-                        jsonObject.getInt("quantidadepedidosUzer")
+                        jsonObject.getString("nome"),
+                        jsonObject.optString("situacao"),
+                        jsonObject.getBoolean("aprovacao"),
+                        jsonObject.getString("dataCadastro"),
+                        jsonObject.getDouble("avaliacao"),
+                        jsonObject.getInt("quantidadePedidos")
                     };
                     model.addRow(rowData);
                 }
@@ -240,7 +241,7 @@ public class GestaoUzer extends javax.swing.JFrame {
         String situacao = jTable1.getValueAt(selectedRow, 2).toString(); // Obtém a situação do usuário selecionado
 
         // Atualiza o estado do usuário selecionado
-        if (situacao.equals("Ativo")) {
+        if (situacao.equals("Ativo") || situacao.equals("Pendente...")) {
             String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do usuário selecionado
             BanirUzer banirUzerFrame = new BanirUzer(idUzer); // Cria a tela BanirUzer com o ID como parâmetro
             banirUzerFrame.setVisible(true); // Exibe a tela BanirUzer
@@ -268,6 +269,7 @@ public class GestaoUzer extends javax.swing.JFrame {
             // Configurar a conexão para um método PUT
             connection.setRequestMethod("PUT");
             connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
             connection.setDoOutput(true);
 
             // Escrever os parâmetros JSON na requisição

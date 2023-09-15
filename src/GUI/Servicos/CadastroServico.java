@@ -4,17 +4,16 @@
  */
 package GUI.Servicos;
 
-import Factory.ConnectionFactory;
-import com.mysql.jdbc.Connection;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.json.JSONObject;
 
 /**
  *
@@ -25,7 +24,6 @@ public class CadastroServico extends javax.swing.JFrame {
     /**
      * Creates new form CadastroServico
      */
-    private Connection connection;
 
     public CadastroServico() {
         try {
@@ -34,7 +32,6 @@ public class CadastroServico extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        connection = (Connection) ConnectionFactory.getConnection();
         initComponents();
     }
 
@@ -159,27 +156,44 @@ public class CadastroServico extends javax.swing.JFrame {
         String categoriaServico = selectCategoria.getSelectedItem().toString();
 
         try {
-            // Verifica se o serviço já existe no banco de dados
-            String verificaSql = "SELECT * FROM servico WHERE nomeServico = ?";
-            PreparedStatement verificaStatement = connection.prepareStatement(verificaSql);
-            verificaStatement.setString(1, nomeServico);
-            ResultSet verificaResultSet = verificaStatement.executeQuery();
+            // Montar os dados do serviço em formato JSON
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("nome", nomeServico);
+            jsonBody.put("tipo", tipoServico);
+            jsonBody.put("categoria", categoriaServico);
 
-            if (verificaResultSet.next()) {
-                // Serviço já existe no banco de dados
-                JOptionPane.showMessageDialog(this, "O Serviço: " + nomeServico + " já existe!");
-            } else {
-                // Serviço não existe, adiciona ao banco de dados
-                String sql = "INSERT INTO servico (nomeServico, tipoServico, categoriaServico) VALUES (?, ?, ?)";
-                PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, nomeServico);
-                statement.setString(2, tipoServico);
-                statement.setString(3, categoriaServico);
-                statement.executeUpdate();
-                JOptionPane.showMessageDialog(this, "O Serviço: " + nomeServico + " foi adicionado!");
+            // Definir a URL da API para cadastrar o serviço
+            String apiUrl = "http://localhost:3333/api/funcionarios/servicos";
+
+            // Abrir uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Configurar a conexão para um método POST
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            // Enviar os dados do serviço como payload JSON
+            try ( OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonBody.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
             }
-        } catch (SQLException e) {
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                JOptionPane.showMessageDialog(this, "O Serviço: " + nomeServico + " foi cadastrado com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao cadastrar serviço.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar serviço.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

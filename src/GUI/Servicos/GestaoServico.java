@@ -4,18 +4,19 @@
  */
 package GUI.Servicos;
 
-import Factory.ConnectionFactory;
-import com.mysql.jdbc.Connection;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -26,10 +27,7 @@ public class GestaoServico extends javax.swing.JFrame {
     /**
      * Creates new form GestaoServico
      */
-    private Connection connection;
-
     public GestaoServico() {
-        connection = (Connection) ConnectionFactory.getConnection();
         try {
             // Define o look and feel Nimbus
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -42,30 +40,80 @@ public class GestaoServico extends javax.swing.JFrame {
 
     private void atualizarListagemServicos() {
         try {
-            // Consultar dados do banco de dados
-            String sql = "SELECT * FROM servico"; // Adiciona a cláusula WHERE para buscar apenas clientes aprovados
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
+            // Defina a URL da API para obter os serviços
+            String apiUrl = "http://localhost:3333/api/servicos";
 
-            // Obter o modelo de tabela
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            // Limpar todas as linhas existentes na tabela
-            model.setRowCount(0);
+            // Configurar a conexão para um método GET
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
 
-            // Adicionar as linhas à tabela
-            while (resultSet.next()) {
-                Object[] rowData = {
-                    resultSet.getString("idServico"),
-                    resultSet.getString("nomeServico"),
-                    resultSet.getString("tipoServico"),
-                    resultSet.getString("categoriaServico")
-                };
-                model.addRow(rowData);
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Ler a resposta JSON
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // Processar a resposta JSON
+                JSONArray jsonArray = new JSONArray(response.toString());
+
+                // Obter o modelo de tabela
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+                // Limpar todas as linhas existentes na tabela
+                model.setRowCount(0);
+
+                // Adicionar as linhas à tabela
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    System.out.println(jsonObject);
+                    String idServico = jsonObject.getString("_id");
+                    String nomeServico = jsonObject.getString("nome");
+
+                    // Obtenha o array de tipos e crie uma string com os tipos
+                    JSONArray tipoArray = jsonObject.getJSONArray("tipo");
+                    StringBuilder tipoServicoBuilder = new StringBuilder();
+
+                    for (int j = 0; j < tipoArray.length(); j++) {
+                        String tipo = tipoArray.getString(j);
+                        tipoServicoBuilder.append(tipo);
+
+                        // Adicione uma vírgula após cada tipo, exceto o último
+                        if (j < tipoArray.length() - 1) {
+                            tipoServicoBuilder.append(", ");
+                        }
+                    }
+
+                    String tipoServico = tipoServicoBuilder.toString();
+                    String categoriaServico = jsonObject.getString("categoria");
+
+                    Object[] rowData = {
+                        idServico,
+                        nomeServico,
+                        tipoServico,
+                        categoriaServico
+                    };
+                    model.addRow(rowData);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao obter dados da API.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao consultar dados do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao obter dados da API.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -198,16 +246,33 @@ public class GestaoServico extends javax.swing.JFrame {
         String idServico = jTable1.getValueAt(selectedRow, 0).toString();
 
         try {
-            String sql = "DELETE FROM servico WHERE idServico = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, idServico);
-            int rowsDeleted = statement.executeUpdate();
-            if (rowsDeleted > 0) {
-                JOptionPane.showMessageDialog(this, "Serviço deletado");
+            // Defina a URL da API para excluir o serviço
+            String apiUrl = "http://localhost:3333/api/funcionarios/servicos/" + idServico;
+
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Configurar a conexão para um método DELETE
+            connection.setRequestMethod("DELETE");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989"); // Substitua com seu token
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                JOptionPane.showMessageDialog(this, "Serviço excluído com sucesso.");
+
+                // Atualizar a listagem de serviços após a exclusão
+                atualizarListagemServicos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao excluir o serviço.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-            atualizarListagemServicos();
-        } catch (SQLException e) {
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao excluir o serviço.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnAtualizarlistagem3ActionPerformed
 

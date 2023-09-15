@@ -4,9 +4,6 @@
  */
 package GUI.Moderador;
 
-
-import java.sql.Connection;
-import Factory.ConnectionFactory;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -150,27 +147,23 @@ public class BanirUzer extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String Motivo = txtMotivo.getText();
 
-        // Estabelecer uma conexão com o banco de dados
-        Connection connection = ConnectionFactory.getConnection();
 
         // Atualizar a situação do usuário
         updateSituacaoUsuario(idSelecionado, Motivo, "Bloqueado");
         JOptionPane.showMessageDialog(null, "O Uzer foi Bloqueado da plataforma.");
         this.dispose();
 
-        // Fechar a conexão com o banco de dados
-        ConnectionFactory.closeConnection(connection);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void updateSituacaoUsuario(String idUzer, String Motivo, String novaSituacao) {
         try {
             // Defina a URL da sua API para atualizar a situação do uzer
-            String apiUrl = "http://localhost:3333/api/uzers/" + idUzer;
+            String apiUrl = "http://localhost:3333/api/funcionariosSearch/uzers/" + idUzer;
 
             // Crie os parâmetros do JSON para atualizar a situação e o motivo
             JSONObject jsonParams = new JSONObject();
-            jsonParams.put("situacaoUzer", novaSituacao);
-            jsonParams.put("motivobanUzer", Motivo);
+            jsonParams.put("situacao", novaSituacao);
+            jsonParams.put("motivoBloqueio", Motivo);
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -179,6 +172,7 @@ public class BanirUzer extends javax.swing.JFrame {
             // Configurar a conexão para um método PUT
             connection.setRequestMethod("PUT");
             connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
             connection.setDoOutput(true);
 
             // Escrever os parâmetros JSON na requisição

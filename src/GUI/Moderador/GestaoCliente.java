@@ -52,7 +52,7 @@ public class GestaoCliente extends javax.swing.JFrame {
     private void atualizarListagemClientes() {
         try {
             // Defina a URL da sua API para obter os clientes
-            String apiUrl = "http://localhost:3333/api/clientes";
+            String apiUrl = "http://localhost:3333/api/funcionariosSearch/clientes";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -60,6 +60,7 @@ public class GestaoCliente extends javax.swing.JFrame {
 
             // Configurar a conexão para um método GET
             connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
 
             int responseCode = connection.getResponseCode();
 
@@ -91,12 +92,12 @@ public class GestaoCliente extends javax.swing.JFrame {
 
                     Object[] rowData = {
                         jsonObject.getString("_id"),
-                        jsonObject.getString("nomeCliente"),
-                        jsonObject.optString("situacaoCliente"),
-                        jsonObject.getBoolean("aprovacaoCliente"),
-                        jsonObject.getString("datacadCliente"),
-                        jsonObject.getDouble("avaliacaoCliente"),
-                        jsonObject.getInt("quantidadepedidosCliente")
+                        jsonObject.getString("nome"),
+                        jsonObject.optString("situacao"),
+                        jsonObject.getBoolean("aprovacao"),
+                        jsonObject.getString("dataCadastro"),
+                        jsonObject.getDouble("avaliacao"),
+                        jsonObject.getInt("quantidadePedidos")
                     };
                     model.addRow(rowData);
                 }
@@ -238,7 +239,7 @@ public class GestaoCliente extends javax.swing.JFrame {
         String situacao = jTable1.getValueAt(selectedRow, 2).toString(); // Obtém a situação do usuário selecionado
 
         // Atualiza o estado do usuário selecionado
-        if (situacao.equals("Ativo")) {
+        if (situacao.equals("Ativo") || situacao.equals("Pendente...")) {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do usuário selecionado
             BanirCliente banirClienteFrame = new BanirCliente(idCliente); // Cria a tela BanirCliente com o ID como parâmetro
             banirClienteFrame.setVisible(true); // Exibe a tela BanirCliente
@@ -265,6 +266,7 @@ public class GestaoCliente extends javax.swing.JFrame {
 
             // Configurar a conexão para um método PUT
             connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
 

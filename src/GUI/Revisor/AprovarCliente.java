@@ -4,28 +4,28 @@
  */
 package GUI.Revisor;
 
-import Factory.ConnectionFactory;
+import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
-import org.apache.pdfbox.Loader;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.rendering.PDFRenderer;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -53,8 +53,6 @@ public class AprovarCliente extends javax.swing.JFrame {
         }
     }
 
-    private Connection connection;
-
     public AprovarCliente() {
         try {
             // Define o look and feel Nimbus
@@ -62,46 +60,8 @@ public class AprovarCliente extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        connection = ConnectionFactory.getConnection();
         initComponents();
         atualizarListagemClientes();
-    }
-
-    private void atualizarListagemClientes() {
-        try {
-            // Consultar dados do banco de dados
-            String sql = "SELECT * FROM cliente";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-
-            // Obter o modelo de tabela
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-
-            // Limpar todas as linhas existentes na tabela
-            model.setRowCount(0);
-
-            // Adicionar as linhas à tabela
-            while (resultSet.next()) {
-                boolean reprovado = resultSet.getBoolean("reprovacaoCliente");
-                boolean aprovado = resultSet.getBoolean("aprovacaoCliente");
-
-                if ((reprovado || (!reprovado && !aprovado))) {
-                    Object[] rowData = {
-                        resultSet.getString("idCliente"),
-                        resultSet.getString("datacadCliente"),
-                        "Oculto",
-                        resultSet.getString("cpfCliente"),
-                        reprovado,
-                        resultSet.getString("nomeCliente")
-                    };
-                    model.addRow(rowData);
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao consultar dados do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     /**
@@ -230,6 +190,119 @@ public class AprovarCliente extends javax.swing.JFrame {
             setLocationRelativeTo(null);
         }// </editor-fold>//GEN-END:initComponents
 
+    private void atualizarListagemClientes() {
+        try {
+            // Defina a URL da sua API para obter a lista de clientes
+            String apiUrl = "http://localhost:3333/api/funcionariosSearch/clientes";
+
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Configurar a conexão para um método GET
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Ler a resposta JSON
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // Parse do JSON de resposta
+                JSONArray jsonArray = new JSONArray(response.toString());
+
+                // Obter o modelo de tabela
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+                // Limpar todas as linhas existentes na tabela
+                model.setRowCount(0);
+
+                // Adicionar as linhas à tabela
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    // Aqui, você precisa adaptar os nomes dos campos de acordo com a estrutura da sua API
+                    String idCliente = jsonObject.getString("_id");
+                    String dataCadastro = jsonObject.getString("dataCadastro");
+                    String cpfCliente = jsonObject.getString("CPF");
+                    boolean aprovado = jsonObject.getBoolean("aprovacao");
+                    boolean reprovado = jsonObject.getBoolean("reprovacao");
+                    String nomeCliente = jsonObject.getString("nome");
+
+                    if (!aprovado) {
+                        Object[] rowData = {
+                            idCliente,
+                            dataCadastro,
+                            "Oculto",
+                            cpfCliente,
+                            reprovado,
+                            nomeCliente
+                        };
+                        model.addRow(rowData);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao obter dados da API.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao obter dados da API.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void updateSituacaoUsuario(String idCliente, boolean aprovado, String motivo) {
+        try {
+            // Defina a URL da sua API para atualizar a situação do cliente
+            String apiUrl = "http://localhost:3333/api/funcionariosSearch/clientes/" + idCliente;
+
+            // Crie os parâmetros do JSON para atualizar a situação, a aprovação e o motivo
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("aprovacao", aprovado);
+            jsonParams.put("reprovacao", !aprovado); // Defina o campo de reprovação como o oposto da aprovação
+            jsonParams.put("motivoBloqueio", motivo);
+
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Configurar a conexão para um método PUT
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            // Escrever os parâmetros JSON na requisição
+            try ( OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonParams.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                JOptionPane.showMessageDialog(null, "Situação do Cliente atualizada com sucesso.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
@@ -238,47 +311,12 @@ public class AprovarCliente extends javax.swing.JFrame {
         }
 
         String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
+        String motivo = "Motivo da aprovação"; // Substitua pelo motivo apropriado
 
-        try {
-            String sql = "Select * from cliente where idCliente = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, idCliente);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                boolean aprovado = resultSet.getBoolean("aprovacaoCliente");
-                if (aprovado) {
-                    return;
-                }
-            }
+        // Atualiza a situação do cliente para aprovado via API
+        updateSituacaoUsuario(idCliente, true, motivo);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        boolean aprovacao = (boolean) jTable1.getValueAt(selectedRow, 4); // Obtém a aprovação do cliente selecionado
-
-        // Atualiza a aprovação do cliente selecionado
-        try {
-            // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE cliente SET aprovacaoCliente = ?, reprovacaoCliente = ? WHERE idCliente = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setBoolean(1, true);
-            statement.setBoolean(2, false);
-            statement.setString(3, idCliente);
-            int rowsUpdated = statement.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                // Atualiza a tabela com a nova aprovação do cliente
-                jTable1.setValueAt(false, selectedRow, 4);
-                JOptionPane.showMessageDialog(this, "O cliente foi aprovado");
-            } else {
-                JOptionPane.showMessageDialog(this, "Falha ao atualizar a aprovação do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar a aprovação do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        atualizarListagemClientes();
+        atualizarListagemClientes(); // Atualize a listagem após a aprovação via API
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -292,32 +330,13 @@ public class AprovarCliente extends javax.swing.JFrame {
             return;
         }
 
-        boolean aprovacao = (boolean) jTable1.getValueAt(selectedRow, 4); // Obtém a aprovação do cliente selecionado
+        String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
+        String motivo = "Motivo da reprovação"; // Substitua pelo motivo apropriado
 
-        // Atualiza a aprovação do cliente selecionado
-        try {
-            String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
+        // Atualiza a situação do cliente para reprovado via API
+        updateSituacaoUsuario(idCliente, false, motivo);
 
-            // Atualiza a aprovação do cliente no banco de dados
-            String sql = "UPDATE cliente SET reprovacaoCliente = ?, aprovacaoCliente = ? WHERE idCliente = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setBoolean(1, true);
-            statement.setBoolean(2, false);
-            statement.setString(3, idCliente);
-            int rowsUpdated = statement.executeUpdate();
-
-            if (rowsUpdated > 0) {
-                // Atualiza a tabela com a nova aprovação do cliente
-                jTable1.setValueAt(true, selectedRow, 4);
-                JOptionPane.showMessageDialog(this, "O cliente foi reprovado");
-            } else {
-                JOptionPane.showMessageDialog(this, "Falha ao atualizar a aprovação do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar a aprovação do cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        atualizarListagemClientes();
+        atualizarListagemClientes(); // Atualize a listagem após a reprovação via API
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -330,36 +349,49 @@ public class AprovarCliente extends javax.swing.JFrame {
         try {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
 
-            // Consultar o PDF do banco de dados
-            String sql = "SELECT historicocriminalCliente FROM cliente WHERE idCliente = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, idCliente);
-            ResultSet resultSet = statement.executeQuery();
+            // Defina a URL da sua API para obter o PDF do cliente
+            String apiUrl = "http://localhost:3333/api/clientes/" + idCliente + "/pdf";
 
-            if (resultSet.next()) {
-                // Obter o PDF do banco de dados
-                byte[] pdfBytes = resultSet.getBytes("historicocriminalCliente");
+            // Abra uma conexão HTTP
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-                // Carregar o PDF como um documento
-                try ( PDDocument document = Loader.loadPDF(pdfBytes)) {
-                    PDFRenderer renderer = new PDFRenderer(document);
-                    BufferedImage image = renderer.renderImage(0); // Renderiza a primeira página do PDF como uma imagem
+            // Configurar a conexão para um método GET
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
 
-                    JFrame frame = new JFrame("Visualizador de PDF");
-                    frame.setSize(630, 891);//210 × 297
-                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            int responseCode = connection.getResponseCode();
 
-                    PDFViewerPanel viewerPanel = new PDFViewerPanel(image);
-                    frame.add(viewerPanel);
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Ler o PDF como um fluxo de bytes
+                InputStream pdfInputStream = connection.getInputStream();
 
-                    frame.setVisible(true);
+                // Crie um arquivo temporário para salvar o PDF
+                File tempFile = File.createTempFile("cliente_pdf", ".pdf");
+
+                // Escreva o conteúdo do PDF no arquivo temporário
+                try ( OutputStream os = new FileOutputStream(tempFile)) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = pdfInputStream.read(buffer)) != -1) {
+                        os.write(buffer, 0, bytesRead);
+                    }
                 }
+
+                // Feche o fluxo de entrada do PDF
+                pdfInputStream.close();
+
+                // Abra o PDF no visualizador padrão
+                Desktop.getDesktop().open(tempFile);
             } else {
-                JOptionPane.showMessageDialog(this, "Nenhum PDF encontrado para o cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Erro ao obter o PDF da API.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException | IOException e) {
+
+            // Fechar a conexão
+            connection.disconnect();
+        } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao obter o PDF do banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao obter o PDF da API.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 

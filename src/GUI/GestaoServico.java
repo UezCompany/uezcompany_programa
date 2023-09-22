@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI.Servicos;
+package GUI;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -197,7 +197,7 @@ public class GestaoServico extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Gestão de Serviços");
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/fundoprograma2.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma2.png"));
         Image image = icon.getImage();
         jPanel1 = new javax.swing.JPanel(){
             public void paintComponent(Graphics g){

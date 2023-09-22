@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI.Revisor;
+package GUI;
 
 import java.awt.Desktop;
 import java.awt.Graphics;
@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -22,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,7 +31,7 @@ import org.json.JSONObject;
  *
  * @author renat
  */
-public class AprovarUzer extends javax.swing.JFrame {
+public class AprovarCliente extends javax.swing.JFrame {
 
     /**
      * Creates new form AceitarUzer
@@ -51,7 +53,7 @@ public class AprovarUzer extends javax.swing.JFrame {
         }
     }
 
-    public AprovarUzer() {
+    public AprovarCliente() {
         try {
             // Define o look and feel Nimbus
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -59,7 +61,7 @@ public class AprovarUzer extends javax.swing.JFrame {
             e.printStackTrace();
         }
         initComponents();
-        atualizarListagemUzers();
+        atualizarListagemClientes();
     }
 
     /**
@@ -85,14 +87,15 @@ public class AprovarUzer extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela de Aprovação");
-        setResizable(false);
+        setMinimumSize(new java.awt.Dimension(640, 360));
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("../Imagem/fundoprograma2.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/GUI/Imagem/fundoprograma2.png"));
         Image image = icon.getImage();
         jPanel1 = new javax.swing.JPanel(){
             public void paintComponent(Graphics g){
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }};
+            jPanel1.setLayout(null);
 
             jTable1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
             jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -123,6 +126,9 @@ public class AprovarUzer extends javax.swing.JFrame {
             });
             jScrollPane1.setViewportView(jTable1);
 
+            jPanel1.add(jScrollPane1);
+            jScrollPane1.setBounds(47, 99, 508, 318);
+
             jButton1.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
             jButton1.setText("Aprovar");
             jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -130,6 +136,8 @@ public class AprovarUzer extends javax.swing.JFrame {
                     jButton1ActionPerformed(evt);
                 }
             });
+            jPanel1.add(jButton1);
+            jButton1.setBounds(581, 106, 100, 22);
 
             jButton2.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
             jButton2.setText("Reprovar");
@@ -138,6 +146,8 @@ public class AprovarUzer extends javax.swing.JFrame {
                     jButton2ActionPerformed(evt);
                 }
             });
+            jPanel1.add(jButton2);
+            jButton2.setBounds(581, 140, 100, 22);
 
             jButton3.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
             jButton3.setText("Atualizar");
@@ -146,10 +156,14 @@ public class AprovarUzer extends javax.swing.JFrame {
                     jButton3ActionPerformed(evt);
                 }
             });
+            jPanel1.add(jButton3);
+            jButton3.setBounds(581, 174, 100, 22);
 
             jLabel1.setFont(new java.awt.Font("Montserrat", 1, 18)); // NOI18N
             jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-            jLabel1.setText("Aprovação de Uzers");
+            jLabel1.setText("Aprovação de Clientes");
+            jPanel1.add(jLabel1);
+            jLabel1.setBounds(227, 36, 220, 23);
 
             jButton5.setFont(new java.awt.Font("Montserrat", 1, 12)); // NOI18N
             jButton5.setText("Exibir pdf");
@@ -158,65 +172,28 @@ public class AprovarUzer extends javax.swing.JFrame {
                     jButton5ActionPerformed(evt);
                 }
             });
-
-            javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-            jPanel1.setLayout(jPanel1Layout);
-            jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(47, 47, 47)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGap(34, 34, 34))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1)
-                    .addGap(233, 233, 233))
-            );
-            jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                    .addGap(33, 33, 33)
-                    .addComponent(jLabel1)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(30, 30, 30))
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(106, 106, 106)
-                    .addComponent(jButton1)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jButton2)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jButton3)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(jButton5)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            );
+            jPanel1.add(jButton5);
+            jButton5.setBounds(581, 208, 100, 22);
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
             );
 
             pack();
             setLocationRelativeTo(null);
         }// </editor-fold>//GEN-END:initComponents
 
-    private void atualizarListagemUzers() {
+    private void atualizarListagemClientes() {
         try {
-            // Defina a URL da sua API para obter a lista de Uzers
-            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/uzers";
+            // Defina a URL da sua API para obter a lista de clientes
+            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/clientes";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -252,21 +229,21 @@ public class AprovarUzer extends javax.swing.JFrame {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                     // Aqui, você precisa adaptar os nomes dos campos de acordo com a estrutura da sua API
-                    String idUzer = jsonObject.getString("_id");
+                    String idCliente = jsonObject.getString("_id");
                     String dataCadastro = jsonObject.getString("dataCadastro");
-                    String cpfUzer = jsonObject.getString("CPF");
+                    String cpfCliente = jsonObject.getString("CPF");
                     boolean aprovado = jsonObject.getBoolean("aprovacao");
                     boolean reprovado = jsonObject.getBoolean("reprovacao");
-                    String nomeUzer = jsonObject.getString("nome");
+                    String nomeCliente = jsonObject.getString("nome");
 
                     if (!aprovado) {
                         Object[] rowData = {
-                            idUzer,
+                            idCliente,
                             dataCadastro,
                             "Oculto",
-                            cpfUzer,
+                            cpfCliente,
                             reprovado,
-                            nomeUzer
+                            nomeCliente
                         };
                         model.addRow(rowData);
                     }
@@ -283,10 +260,10 @@ public class AprovarUzer extends javax.swing.JFrame {
         }
     }
 
-    private void updateSituacaoUsuario(String idUzer, boolean aprovado, String motivo) {
+    private void updateSituacaoUsuario(String idCliente, boolean aprovado, String motivo) {
         try {
-            // Defina a URL da sua API para atualizar a situação do uzer
-            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/uzers/" + idUzer;
+            // Defina a URL da sua API para atualizar a situação do cliente
+            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/clientes/" + idCliente;
 
             // Crie os parâmetros do JSON para atualizar a situação, a aprovação e o motivo
             JSONObject jsonParams = new JSONObject();
@@ -313,67 +290,67 @@ public class AprovarUzer extends javax.swing.JFrame {
             int responseCode = connection.getResponseCode();
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                JOptionPane.showMessageDialog(null, "Situação do Uzer atualizada com sucesso.");
+                JOptionPane.showMessageDialog(null, "Situação do Cliente atualizada com sucesso.");
             } else {
-                JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Falha ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
 
             // Fechar a conexão
             connection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do Uzer.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar a situação do Cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Nenhum uzer selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Nenhum cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do uzer selecionado
+        String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
         String motivo = "Motivo da aprovação"; // Substitua pelo motivo apropriado
 
-        // Atualiza a situação do uzer para aprovado via API
-        updateSituacaoUsuario(idUzer, true, motivo);
+        // Atualiza a situação do cliente para aprovado via API
+        updateSituacaoUsuario(idCliente, true, motivo);
 
-        atualizarListagemUzers(); // Atualize a listagem após a aprovação via API
+        atualizarListagemClientes(); // Atualize a listagem após a aprovação via API
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        atualizarListagemUzers();
+        atualizarListagemClientes();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Nenhum uzer selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Nenhum cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do uzer selecionado
+        String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
         String motivo = "Motivo da reprovação"; // Substitua pelo motivo apropriado
 
-        // Atualiza a situação do uzer para reprovado via API
-        updateSituacaoUsuario(idUzer, false, motivo);
+        // Atualiza a situação do cliente para reprovado via API
+        updateSituacaoUsuario(idCliente, false, motivo);
 
-        atualizarListagemUzers(); // Atualize a listagem após a reprovação via API
+        atualizarListagemClientes(); // Atualize a listagem após a reprovação via API
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Nenhum uzer selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Nenhum cliente selecionado.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do uzer selecionado
+            String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
 
-            // Defina a URL da sua API para obter o PDF do uzer
-            String apiUrl = "https://uezapi.onrender.com/api/uzers/" + idUzer + "/pdf";
+            // Defina a URL da sua API para obter o PDF do cliente
+            String apiUrl = "https://uezapi.onrender.com/api/clientes/" + idCliente + "/pdf";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -390,7 +367,7 @@ public class AprovarUzer extends javax.swing.JFrame {
                 InputStream pdfInputStream = connection.getInputStream();
 
                 // Crie um arquivo temporário para salvar o PDF
-                File tempFile = File.createTempFile("uzer_pdf", ".pdf");
+                File tempFile = File.createTempFile("cliente_pdf", ".pdf");
 
                 // Escreva o conteúdo do PDF no arquivo temporário
                 try ( OutputStream os = new FileOutputStream(tempFile)) {
@@ -416,7 +393,6 @@ public class AprovarUzer extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Erro ao obter o PDF da API.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
@@ -436,18 +412,14 @@ public class AprovarUzer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AprovarUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AprovarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AprovarUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AprovarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AprovarUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AprovarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AprovarUzer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AprovarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -456,7 +428,7 @@ public class AprovarUzer extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AprovarUzer().setVisible(true);
+                new AprovarCliente().setVisible(true);
             }
         });
     }

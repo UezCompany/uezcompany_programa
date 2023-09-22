@@ -5,12 +5,6 @@
 package GUI;
 
 import GUI.Login.TelaLogin;
-import GUI.Moderador.GestaoCliente;
-import GUI.Moderador.GestaoUzer;
-import GUI.Revisor.AprovarCliente;
-import GUI.Revisor.AprovarUzer;
-import GUI.Servicos.CadastroServico;
-import GUI.Servicos.GestaoServico;
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -62,7 +56,7 @@ public class Homepage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("./Imagem/HomePagebemvindo.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/GUI/Imagem/HomePagebemvindo.png"));
         Image image = icon.getImage();
         jDesktopPane1 = new javax.swing.JDesktopPane(){
             public void paintComponent(Graphics g){

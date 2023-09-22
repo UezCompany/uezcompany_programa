@@ -14,9 +14,6 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class UezCompanyFinal {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         try {
             // Define o look and feel Nimbus
@@ -25,8 +22,8 @@ public class UezCompanyFinal {
             e.printStackTrace();
         }
         
-        TelaLogin main = new TelaLogin();
-        main.setVisible(true);
+        TelaLogin t = new TelaLogin();
+        t.setVisible(true);
     }
     
 }

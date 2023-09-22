@@ -132,7 +132,7 @@
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="ImageIcon icon = new ImageIcon(getClass().getResource(&quot;../Imagem/fundoprograma2.png&quot;));&#xa;        Image image = icon.getImage();&#xa;        jPanel1 = new javax.swing.JPanel(){&#xa;            public void paintComponent(Graphics g){&#xa;                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);&#xa;            }};"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="ImageIcon icon = new ImageIcon(getClass().getResource(&quot;/GUI/Imagem/fundoprograma2.png&quot;));&#xa;        Image image = icon.getImage();&#xa;        jPanel1 = new javax.swing.JPanel(){&#xa;            public void paintComponent(Graphics g){&#xa;                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);&#xa;            }};"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>

@@ -4,21 +4,12 @@
  */
 package GUI.Login;
 
-import Factory.ConnectionFactory;
 import GUI.Homepage;
-import java.sql.*;
-import java.sql.DriverManager;
-import java.awt.Graphics;
-import java.awt.Image;
-import javax.swing.ImageIcon;
+
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -222,8 +213,9 @@ public class TelaLogin extends javax.swing.JFrame {
         JSONObject jsonResponse = new JSONObject(response.toString());
         String nomeFuncionario = jsonResponse.getString("nomeFuncionario");
 
-        JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeFuncionario + "!");
-        abrirHomepage();
+        JOptionPane.showMessageDialog(this, "Bem-vindo, " + nomeFuncionario + "!");
+        Homepage t = new Homepage();
+        t.setVisible(true);
         this.dispose();
     }
 
@@ -233,10 +225,6 @@ public class TelaLogin extends javax.swing.JFrame {
         txtSenha.setText("");
     }
 
-    private void abrirHomepage() {
-        Homepage t = new Homepage();
-        t.setVisible(true);
-    }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         fazerLogin();

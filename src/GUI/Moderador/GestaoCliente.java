@@ -52,7 +52,7 @@ public class GestaoCliente extends javax.swing.JFrame {
     private void atualizarListagemClientes() {
         try {
             // Defina a URL da sua API para obter os clientes
-            String apiUrl = "http://uezapi.onrender.com/api/funcionariosSearch/clientes";
+            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/clientes";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -254,7 +254,7 @@ public class GestaoCliente extends javax.swing.JFrame {
 
         try {
             // Defina a URL da sua API para atualizar a situação do cliente
-            String apiUrl = "http://uezapi.onrender.com/api/clientes/" + idCliente;
+            String apiUrl = "https://uezapi.onrender.com/api/clientes/" + idCliente;
 
             // Crie os parâmetros do JSON para atualizar a situação
             JSONObject jsonParams = new JSONObject();

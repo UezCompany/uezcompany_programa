@@ -41,7 +41,7 @@ public class GestaoServico extends javax.swing.JFrame {
     private void atualizarListagemServicos() {
         try {
             // Defina a URL da API para obter os serviços
-            String apiUrl = "http://uezapi.onrender.com/api/servicos";
+            String apiUrl = "https://uezapi.onrender.com/api/servicos";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -247,7 +247,7 @@ public class GestaoServico extends javax.swing.JFrame {
 
         try {
             // Defina a URL da API para excluir o serviço
-            String apiUrl = "http://uezapi.onrender.com/api/funcionarios/servicos/" + idServico;
+            String apiUrl = "https://uezapi.onrender.com/api/funcionarios/servicos/" + idServico;
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);

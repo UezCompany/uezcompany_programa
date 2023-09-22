@@ -193,7 +193,7 @@ public class AprovarCliente extends javax.swing.JFrame {
     private void atualizarListagemClientes() {
         try {
             // Defina a URL da sua API para obter a lista de clientes
-            String apiUrl = "http://uezapi.onrender.com/api/funcionariosSearch/clientes";
+            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/clientes";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -263,7 +263,7 @@ public class AprovarCliente extends javax.swing.JFrame {
     private void updateSituacaoUsuario(String idCliente, boolean aprovado, String motivo) {
         try {
             // Defina a URL da sua API para atualizar a situação do cliente
-            String apiUrl = "http://uezapi.onrender.com/api/funcionariosSearch/clientes/" + idCliente;
+            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/clientes/" + idCliente;
 
             // Crie os parâmetros do JSON para atualizar a situação, a aprovação e o motivo
             JSONObject jsonParams = new JSONObject();
@@ -350,7 +350,7 @@ public class AprovarCliente extends javax.swing.JFrame {
             String idCliente = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do cliente selecionado
 
             // Defina a URL da sua API para obter o PDF do cliente
-            String apiUrl = "http://uezapi.onrender.com/api/clientes/" + idCliente + "/pdf";
+            String apiUrl = "https://uezapi.onrender.com/api/clientes/" + idCliente + "/pdf";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);

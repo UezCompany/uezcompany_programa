@@ -180,7 +180,7 @@ public class TelaLogin extends javax.swing.JFrame {
         String senha = new String(txtSenha.getPassword());
 
         try {
-            String apiUrl = "http://uezapi.onrender.com/api/funcionario/login";
+            String apiUrl = "https://uezapi.onrender.com/api/funcionario/login";
             JSONObject jsonParams = new JSONObject();
             jsonParams.put("idFuncionario", Integer.parseInt(id));
             jsonParams.put("senhaFuncionario", senha);
@@ -188,6 +188,7 @@ public class TelaLogin extends javax.swing.JFrame {
             HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer Renatchingaymuitolegal898989");
             connection.setDoOutput(true);
 
             try ( OutputStream os = connection.getOutputStream()) {

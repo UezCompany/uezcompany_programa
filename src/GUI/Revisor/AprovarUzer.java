@@ -216,7 +216,7 @@ public class AprovarUzer extends javax.swing.JFrame {
     private void atualizarListagemUzers() {
         try {
             // Defina a URL da sua API para obter a lista de Uzers
-            String apiUrl = "http://localhost:3333/api/funcionariosSearch/uzers";
+            String apiUrl = "http://uezapi.onrender.com/api/funcionariosSearch/uzers";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -286,7 +286,7 @@ public class AprovarUzer extends javax.swing.JFrame {
     private void updateSituacaoUsuario(String idUzer, boolean aprovado, String motivo) {
         try {
             // Defina a URL da sua API para atualizar a situação do uzer
-            String apiUrl = "http://localhost:3333/api/funcionariosSearch/uzers/" + idUzer;
+            String apiUrl = "http://uezapi.onrender.com/api/funcionariosSearch/uzers/" + idUzer;
 
             // Crie os parâmetros do JSON para atualizar a situação, a aprovação e o motivo
             JSONObject jsonParams = new JSONObject();
@@ -373,7 +373,7 @@ public class AprovarUzer extends javax.swing.JFrame {
             String idUzer = jTable1.getValueAt(selectedRow, 0).toString(); // Obtém o id do uzer selecionado
 
             // Defina a URL da sua API para obter o PDF do uzer
-            String apiUrl = "http://localhost:3333/api/uzers/" + idUzer + "/pdf";
+            String apiUrl = "http://uezapi.onrender.com/api/uzers/" + idUzer + "/pdf";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);

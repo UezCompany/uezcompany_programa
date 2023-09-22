@@ -180,7 +180,7 @@ public class TelaLogin extends javax.swing.JFrame {
         String senha = new String(txtSenha.getPassword());
 
         try {
-            String apiUrl = "http://localhost:3333/api/funcionario/login";
+            String apiUrl = "http://uezapi.onrender.com/api/funcionario/login";
             JSONObject jsonParams = new JSONObject();
             jsonParams.put("idFuncionario", Integer.parseInt(id));
             jsonParams.put("senhaFuncionario", senha);

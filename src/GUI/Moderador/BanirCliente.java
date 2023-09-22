@@ -158,7 +158,7 @@ public class BanirCliente extends javax.swing.JFrame {
     private void updateSituacaoUsuario(String idCliente, String Motivo, String novaSituacao) {
         try {
             // Defina a URL da sua API para atualizar a situação do cliente
-            String apiUrl = "http://localhost:3333/api/funcionariosSearch/clientes/" + idCliente;
+            String apiUrl = "http://uezapi.onrender.com/api/funcionariosSearch/clientes/" + idCliente;
 
             // Crie os parâmetros do JSON para atualizar a situação e o motivo
             JSONObject jsonParams = new JSONObject();

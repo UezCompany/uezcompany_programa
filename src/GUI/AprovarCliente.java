@@ -231,7 +231,6 @@ public class AprovarCliente extends javax.swing.JFrame {
                     // Aqui, você precisa adaptar os nomes dos campos de acordo com a estrutura da sua API
                     String idCliente = jsonObject.getString("_id");
                     String dataCadastro = jsonObject.getString("dataCadastro");
-                    String cpfCliente = jsonObject.getString("CPF");
                     boolean aprovado = jsonObject.getBoolean("aprovacao");
                     boolean reprovado = jsonObject.getBoolean("reprovacao");
                     String nomeCliente = jsonObject.getString("nome");
@@ -241,7 +240,7 @@ public class AprovarCliente extends javax.swing.JFrame {
                             idCliente,
                             dataCadastro,
                             "Oculto",
-                            cpfCliente,
+                            "Oculto",
                             reprovado,
                             nomeCliente
                         };

@@ -254,7 +254,6 @@ public class AprovarUzer extends javax.swing.JFrame {
                     // Aqui, você precisa adaptar os nomes dos campos de acordo com a estrutura da sua API
                     String idUzer = jsonObject.getString("_id");
                     String dataCadastro = jsonObject.getString("dataCadastro");
-                    String cpfUzer = jsonObject.getString("CPF");
                     boolean aprovado = jsonObject.getBoolean("aprovacao");
                     boolean reprovado = jsonObject.getBoolean("reprovacao");
                     String nomeUzer = jsonObject.getString("nome");
@@ -264,7 +263,7 @@ public class AprovarUzer extends javax.swing.JFrame {
                             idUzer,
                             dataCadastro,
                             "Oculto",
-                            cpfUzer,
+                            "Oculto",
                             reprovado,
                             nomeUzer
                         };

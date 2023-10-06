@@ -53,6 +53,7 @@ public class GestaoCliente extends javax.swing.JFrame {
         try {
             // Defina a URL da sua API para obter os clientes
             String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/clientes";
+            System.out.println(System.getenv("OS"));
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);

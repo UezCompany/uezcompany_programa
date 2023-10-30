@@ -163,7 +163,7 @@ public class CadastroServico extends javax.swing.JFrame {
             jsonBody.put("categoria", categoriaServico);
 
             // Definir a URL da API para cadastrar o serviço
-            String apiUrl = "https://uezapi.onrender.com/api/funcionarios/servicos";
+            String apiUrl = "https://api.uezcompany.com/funcionarios/servicos";
 
             // Abrir uma conexão HTTP
             URL url = new URL(apiUrl);

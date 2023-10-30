@@ -158,7 +158,7 @@ public class BanirUzer extends javax.swing.JFrame {
     private void updateSituacaoUsuario(String idUzer, String Motivo, String novaSituacao) {
         try {
             // Defina a URL da sua API para atualizar a situação do uzer
-            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/uzers/" + idUzer;
+            String apiUrl = "https://api.uezcompany.com/funcionariosSearch/uzers/" + idUzer;
 
             // Crie os parâmetros do JSON para atualizar a situação e o motivo
             JSONObject jsonParams = new JSONObject();

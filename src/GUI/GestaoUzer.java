@@ -43,7 +43,7 @@ public class GestaoUzer extends javax.swing.JFrame {
     private void atualizarListagemUzers() {
         try {
             // Defina a URL da sua API para obter os uzers
-            String apiUrl = "https://uezapi.onrender.com/api/funcionariosSearch/uzers";
+            String apiUrl = "https://api.uezcompany.com/funcionariosSearch/uzers";
 
             // Abra uma conexão HTTP
             URL url = new URL(apiUrl);
@@ -258,7 +258,7 @@ public class GestaoUzer extends javax.swing.JFrame {
 
         try {
             // Defina a URL da sua API para atualizar a situação do uzer
-            String apiUrl = "https://uezapi.onrender.com/api/uzers/" + idUzer;
+            String apiUrl = "https://api.uezcompany.com/uzers/" + idUzer;
 
             // Crie os parâmetros do JSON para atualizar a situação
             JSONObject jsonParams = new JSONObject();
